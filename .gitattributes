@@ -1,0 +1,6 @@
+* text=auto
+*.blend binary
+*.step binary
+*.stl binary
+*.png binary
+*.webp binary
