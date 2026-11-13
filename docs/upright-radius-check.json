@@ -1,0 +1,7 @@
+{
+  "upright_front_right_edge_radius_mm": 0.35,
+  "measurement": "Cross-section at Z50mm, resolved perpendicular to tapered upright side plane",
+  "samples": 50,
+  "maximum_radial_deviation_mm": 0.0006198417520245636,
+  "note": "12-segment rounded mesh profile; local numeric cleanup tolerance 0.002mm. Not a manufacturing certification."
+}

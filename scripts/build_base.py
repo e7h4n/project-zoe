@@ -24,6 +24,8 @@ cover = cover.cut(pocket)
 # Restore side wings around the original central stand clearance.
 cover = cover.cut(box(-25.8, -2, -1, 51.6, 14, 8))
 cover = cover.cut(box(-25.8, 10, 0, 51.6, 5, 2.8))
+# No downward lip at the central rear notch; keep the roof and other skirts.
+cover = cover.cut(box(-25.8, 12, -1, 51.6, 1.2, 4.8))
 # Preserve the D85 x 0.5 seat and its two opposite R0.25 transitions.
 r = 42.5
 f = .25
@@ -41,6 +43,8 @@ assert cover.isInside(cq.Vector(35, 5, 4.2))
 assert not cover.isInside(cq.Vector(0, 5, 4.2))
 assert cover.isInside(cq.Vector(0, 125, 4.49))
 assert not cover.isInside(cq.Vector(0, 125, 4.51))
+assert not cover.isInside(cq.Vector(0, 12.6, 3.2))
+assert cover.isInside(cq.Vector(0, 12.6, 4))
 for ext in ['step', 'stl']:
     cq.exporters.export(cover, str(ROOT/('cad/base.'+ext)),
                         **({'tolerance': .02, 'angularTolerance': .06} if ext == 'stl' else {}))
@@ -50,6 +54,8 @@ checks = {'upper_edge_radius_mm': .35, 'plan_corner_radius_mm': 8,
           'minimum_gap_mm': cover.distance(fixed), 'restored_rear_wings_y': 0,
           'central_notch': {'x': [-25.8, 25.8], 'y_end': 12},
           'seat_D85_depth_0_5_preserved': True,
+          'central_rear_downturned_lip_removed': True,
+          'floor_top_z_mm': 2, 'nominal_central_vertical_clearance_mm': 1.8,
           'scope': 'Appearance prototype. Hollow cover retained. No sensor fit/manufacturing validation.'}
 (ROOT/'docs/checks.json').write_text(json.dumps(checks, indent=2)+'\n')
 print(json.dumps(checks, indent=2))

@@ -4,7 +4,7 @@
   "valid": true,
   "solids": 1,
   "fixed_overlap_mm3": 0.0,
-  "minimum_gap_mm": 0.7999999999999972,
+  "minimum_gap_mm": 0.7999999999999872,
   "restored_rear_wings_y": 0,
   "central_notch": {
     "x": [
@@ -14,5 +14,8 @@
     "y_end": 12
   },
   "seat_D85_depth_0_5_preserved": true,
+  "central_rear_downturned_lip_removed": true,
+  "floor_top_z_mm": 2,
+  "nominal_central_vertical_clearance_mm": 1.8,
   "scope": "Appearance prototype. Hollow cover retained. No sensor fit/manufacturing validation."
 }

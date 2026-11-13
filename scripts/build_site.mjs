@@ -14,6 +14,7 @@ function run(args) {
   if (child.error) throw child.error;
   if (child.status !== 0) throw new Error(`${python} ${args.join(' ')} failed (${child.status})`);
 }
+run(['scripts/check_model.py']);
 run(['scripts/export_glb.py', '--out', out]);
 const manifestFile = path.join(out, 'model-manifest.json');
 const manifest = JSON.parse(await readFile(manifestFile, 'utf8'));

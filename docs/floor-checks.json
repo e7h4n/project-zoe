@@ -5,7 +5,9 @@
   ],
   "floor_rear_y_mm": 2,
   "floor_front_y_mm": 168,
-  "floor_thickness_mm": 1.2,
+  "floor_thickness_mm": 2,
+  "Y32_step_removed": true,
+  "nominal_central_vertical_clearance_mm": 1.8,
   "floor_plan_radius_mm": 6,
   "cover_plan_radius_mm": 8,
   "external_contour_inset_mm": 2,
@@ -19,7 +21,7 @@
     "y_end": 14
   },
   "fixed_cover_overlap_mm3": 0.0,
-  "minimum_fixed_cover_distance_mm": 0.7999999999999893,
+  "minimum_fixed_cover_distance_mm": 0.7999999999999858,
   "fixed_local_valid": true,
   "fixed_local_solids": 1,
   "scope": "Contour prototype only. Clearances are nominal CAD values, not production or weighing validation."
