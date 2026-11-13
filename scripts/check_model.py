@@ -45,6 +45,36 @@ for tri in mesh.loop_triangles:
             if p.x > 20 and 4.64 < p.y < 5.01 and -.36 < u < .01:
                 errors.append(abs(math.hypot(u + .35, p.y - 4.65) - .35))
 assert len(errors) > 10 and max(errors) < .003, f'R0.35 profile invalid: {errors}'
+# No transverse raised/recessed fillet rail at either old Boolean seam.
+for ys, bottom, top in [([9.8,9.85,9.9,10,10.1,11],315,320),
+                        ([103,103.5,104,105,106],305,310)]:
+    for y in ys:
+        for z, direction in [(top, Vector((0,0,-1))), (bottom, Vector((0,0,1)))]:
+            hit = fixed.ray_cast(Vector((0,y,z))-direction*2, direction, 3)[0]
+            assert hit is not None and abs(hit.z-z) < .002, f'Upper seam step at Y{y}: {hit}'
+
+# Upper arm and crown must have the same rounded treatment on BOTH rims.
+# Radial ray samples catch a missed bottom rim or a bevel stopping at a height cutoff.
+k = 3 / (105 - 9.7)
+side = Vector((1, k, 0)).normalized()
+h = 10 - k * (30 - 9.7)
+upper_errors = {}
+profiles = [
+    ('arm_top', Vector((h - .35 * math.sqrt(1+k*k), 30, 319.65)), side, Vector((0,0,1))),
+    ('arm_bottom', Vector((h - .35 * math.sqrt(1+k*k), 30, 315.35)), side, Vector((0,0,-1))),
+    ('crown_top', Vector((21.65,125,309.65)), Vector((1,0,0)), Vector((0,0,1))),
+    ('crown_bottom', Vector((21.65,125,305.35)), Vector((1,0,0)), Vector((0,0,-1))),
+]
+for label, center, n1, n2 in profiles:
+    deviations = []
+    for degrees in range(10, 81, 10):
+        angle = math.radians(degrees)
+        direction = n1 * math.cos(angle) + n2 * math.sin(angle)
+        hit = fixed.ray_cast(center + direction * 2, -direction, 3)[0]
+        assert hit is not None, f'{label}: missing surface'
+        deviations.append(abs((hit-center).length - .35))
+    upper_errors[label] = max(deviations)
+    assert max(deviations) < .006, f'{label}: R0.35 missing or inconsistent: {deviations}'
 for evaluated, mesh, tree in meshes.values():
     evaluated.to_mesh_clear()
-print(f'PASS: manifold source, uniform 2mm floor, central rear lip removed, R0.35 upright profile ({max(errors):.6f}mm max radial deviation).')
+print(f'PASS: manifold source, uniform 2mm floor, central rear lip removed, R0.35 upright profile ({max(errors):.6f}mm max radial deviation); upper arm/crown top AND bottom rims: {upper_errors}.')

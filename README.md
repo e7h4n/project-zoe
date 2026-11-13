@@ -99,7 +99,8 @@ Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit.
 - Fixed upright and flat bottom plate are united in the Blender source. The floor follows the cover contour, including the rear side wings: **96 × 166 × 2.0 mm**, spanning Y2–168, with R6 plan corners. Its contour is inset 2 mm from the cover exterior, giving a nominal **0.8 mm side gap** to the 1.2 mm skirt. The floor notch is X±27.8 through Y14; the original central stand tongue is retained. No separate raised perimeter frame.
 - The fixed floor and retained central tongue now share **Z2.0**: the former 0.8 mm step at Y32 is removed. Nominal vertical space below the Z3.8 cover roof is **1.8 mm**.
 - The short downturned lip at the central rear notch (X±25.8, Y12–13.2) is removed below Z3.8. The top surface, rear side wings and other cover skirts are retained.
-- The upright's exposed longitudinal edges have a real **R0.35 mm** rounded mesh profile, continuing along the inner lower bend. The new Blender mesh is checked for manifold topology. `scripts/check_model.py` samples the Z50 cross-section to verify the rounded profile, not just its shading.
+- The upright's exposed longitudinal edges have a real **R0.35 mm** rounded mesh profile, continuing along the inner lower bend **and through the upper bend, downset arm and both circular crown rims**. The former bend/arm Boolean micro-steps and crown overlap crescent are cleaned before rounding, so they do not become raised fillet seams. The Blender mesh is checked for manifold topology. `scripts/check_model.py` samples the Z50 cross-section plus radial sections of both arm/crown rims to verify geometry, not just shading. This remains mesh geometry, not complete parametric solid CAD.
+- `scripts/rebuild_rounded_shell.py` reproduces the reviewed mesh from pinned source commit `7aaa157` and the STL outputs of `build_floor.py`/`build_base.py`; it overwrites `model/project-zoe.blend`. Numerical seam cleanup moves points by under 0.02 mm at the bend/arm join and under 0.08 mm at the arm/crown overlap, bringing each local join onto shared nominal surfaces.
 - Circular flat seat: **Ø85 mm**, centered at **X0 / Y125**, coaxial with the dripper support.
 - Recess: **0.5 mm** deep; nominal remaining cover roof thickness beneath its flat region is **0.7 mm**. This is an appearance prototype, not a validated structural thickness.
 - S transition: two tangent, oppositely curved **R0.25** quarter circles, tangent to both planes. Radial blend width **0.5 mm**, outer transition diameter **Ø86 mm**.
@@ -125,7 +126,10 @@ python scripts/build_base.py
 
 `cad/center-section-AA.dxf` contains the revised exact X0 local CAD section; `cad/bottom-half-section.step` is a half-section of those local solids. They describe the floor/cover revision, **not** a complete parameterized upright. The upright edge fillets are authored in the full Blender mesh; they have not been rebuilt into a full solid-CAD upright. `docs/upright-radius-check.json` records the rounded mesh-profile measurement. Tiny pre-existing mesh slivers above Z4.99 were cleaned with a 0.002 mm weld tolerance before adding the intended 12-segment fillets; other upper details were not redesigned.
 
-Every website build now checks the source mesh topology, uniform Z2 floor, removed rear lip and R0.35 upright profile before export.
+Every website build now checks the source mesh topology, uniform Z2 floor, removed rear lip and R0.35 upright/arm/crown profiles (top and bottom) before export.
+
+![Continuous upper bend/arm fillet](docs/upper-joint.png)
+![Unified arm and crown upper/lower edges](docs/upper-underside.png)
 
 ### Contour-matched underside
 
