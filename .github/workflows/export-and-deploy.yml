@@ -1,4 +1,4 @@
-name: Render model and deploy website
+name: Export GLB and deploy interactive website
 
 on:
   push:
@@ -7,28 +7,34 @@ on:
       - 'model/**'
       - 'web/**'
       - 'scripts/**'
-      - 'requirements-render.txt'
-      - '.github/workflows/render-and-deploy.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'requirements-export.txt'
+      - 'THIRD_PARTY_NOTICES.txt'
+      - '.github/workflows/export-and-deploy.yml'
   pull_request:
     paths:
       - 'model/**'
       - 'web/**'
       - 'scripts/**'
-      - 'requirements-render.txt'
-      - '.github/workflows/render-and-deploy.yml'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'requirements-export.txt'
+      - 'THIRD_PARTY_NOTICES.txt'
+      - '.github/workflows/export-and-deploy.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: render-${{ github.workflow }}-${{ github.ref }}
+  group: glb-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  render:
+  build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 20
     env:
       OMP_NUM_THREADS: '4'
       OPENBLAS_NUM_THREADS: '1'
@@ -40,21 +46,31 @@ jobs:
         with:
           python-version: '3.11'
           cache: pip
-          cache-dependency-path: requirements-render.txt
-      - name: Install headless render dependencies
+          cache-dependency-path: requirements-export.txt
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install headless Blender and web dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends libegl1 libgl1 libxkbcommon0 libxi6 libxrender1
-          python -m pip install -r requirements-render.txt
-      - name: Render Blender source and build website
-        run: python scripts/render_site.py --out dist
-      - name: Check the website and render provenance
-        run: python scripts/check_site.py dist
-      - name: Upload rendered preview (including pull requests)
+          python -m pip install -r requirements-export.txt
+          npm ci
+      - name: Export GLB and build website
+        run: npm run build
+      - name: Install browser for interaction tests
+        run: npx playwright install --with-deps chromium
+      - name: Test mouse, keyboard and touch controls
+        run: npm test
+      - name: Upload website and QA screenshots (including pull requests)
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: rendered-website
-          path: dist/
+          name: interactive-website-and-qa
+          path: |
+            dist/
+            test-results/
           retention-days: 14
       - name: Upload GitHub Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -64,7 +80,7 @@ jobs:
 
   deploy:
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-    needs: render
+    needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -74,6 +90,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy rendered website
+      - name: Deploy interactive website
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

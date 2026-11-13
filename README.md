@@ -2,62 +2,89 @@
 
 **The ultimate elegant coffee brewing tool.**
 
-An open-source pour-over stand concept. A circular crown, a dripper support, and a slender base, shown as a single white model.
+An open-source pour-over stand concept. A circular crown, a dripper support, and a slender base. Explore the real 3D assembly as a clean white model.
 
-[Website](https://e7h4n.github.io/project-zoe/) · [Original concept page](https://project-zoe.okou.app) · [Blender source](model/project-zoe.blend)
+[Interactive website](https://e7h4n.github.io/project-zoe/) · [Blender source](model/project-zoe.blend)
 
 ![Project Zoe white model](docs/preview.png)
+
+## 3D controls
+
+| Input | Action |
+| --- | --- |
+| Left mouse drag | Orbit / rotate |
+| Right mouse drag | Pan |
+| Mouse wheel / middle drag | Zoom |
+| One-finger drag | Rotate |
+| Two-finger drag / pinch | Pan / zoom |
+| Arrow keys (viewer focused) | Pan |
+| `+` / `−` (viewer focused) | Zoom |
+| `R`, `Home`, or **Reset view** | Restore the initial view |
+
+The viewer uses Three.js and OrbitControls. Context menus are suppressed **only inside the 3D canvas**. It renders on demand, with damping while moving; it does not auto-rotate. Keyboard focus is visible, and the model can be downloaded if WebGL is unavailable.
+
+## Blender → GLB → website CI
+
+Every relevant push to `main`:
+
+1. Opens the actual `model/project-zoe.blend` in headless **Blender 5.0.1**, with automatic script execution disabled.
+2. Exports only the three product meshes, applying modifiers and a white-clay material in memory. Cameras, studio lights, floor and accessory proxies are excluded.
+3. Converts millimeters to glTF's meter units, uses Y-up, and applies **Draco compression**. Base display normals are smoothed while preserving >30° creases; vertices and original CAD geometry are unchanged. High-precision 20-bit position quantization keeps the small recess transition visually intact.
+4. Bundles the viewer and self-hosted Draco decoder, producing content-hashed assets. No CDN, account, project secret or external texture is needed at runtime.
+5. Validates the GLB structure, product objects, local assets and source/output hashes.
+6. Runs real Chromium tests for dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout and touch rotate/pan/pinch.
+7. Deploys to **GitHub Pages** at <https://e7h4n.github.io/project-zoe/>.
+
+`model-manifest.json` on the live site records the Blender-source hash, export/build scripts, dependency lockfile, commit and exported asset hashes. The full Blender source remains unchanged by export.
+
+Pull requests build and upload an `interactive-website-and-qa` Actions artifact, including the GLB and browser screenshots, but **do not deploy**. Manual builds are available from the Actions tab. Actions are pinned to commit SHAs. Build/test has read-only repository access; deployment has only the additional Pages/OIDC permissions it needs. Failed browser tests block deployment.
+
+The website now loads an actual GLB, not a pre-rendered image. The `.blend` remains the editable source of truth. `docs/preview.png` is a static documentation illustration. The original <https://project-zoe.okou.app> page is a separate historical snapshot, not the automatic CI target.
 
 ## Source files
 
 | Path | Contents |
 | --- | --- |
-| `model/project-zoe.blend` | Complete exterior assembly, aluminum materials, camera and studio lights. Blender 5.0.1. |
+| `model/project-zoe.blend` | Complete exterior assembly, original aluminum materials, camera and studio lights. Blender 5.0.1. |
 | `cad/base.step` | Engineering solid of the recessed weighing base **only**, not the complete assembly. |
-| `cad/base-before-recess.step` | Rounded base before the circular recess, for rebuilding the base. |
+| `cad/base-before-recess.step` | Rounded base before the circular recess. |
 | `scripts/build_base.py` | Parametric CadQuery construction of the recessed base. |
-| `web/index.html` | Responsive single-screen concept page. No framework, external fonts, analytics or account required. |
-| `scripts/render_site.py` | Headless Blender render and content-hashed website image build. |
-| `docs/` | White-model previews, section detail and geometric checks. |
+| `scripts/export_glb.py` | Headless Blender → compressed GLB export. |
+| `scripts/build_site.mjs` | Export, bundle and assemble the static website. |
+| `scripts/check_site.py` | GLB, asset and provenance validation. |
+| `scripts/test_viewer.mjs` | Real browser mouse, keyboard, touch and responsive tests. |
+| `web/` | Responsive page and interactive Three.js viewer. |
+| `docs/` | Static previews, section detail and geometric checks. |
 
-All model coordinates are in millimeters. The `.blend` keeps the original aluminum finish; the website renderer applies white-clay materials in memory without saving over the source model. Hidden accessory proxies and unrelated scene objects have been removed from the published file. No external textures or supplier CAD are required.
+The Blender scene uses millimeters. There are no external textures or supplier CAD dependencies. Hidden accessory proxies and unrelated scene objects have been removed from the published model.
 
-## Blender → website CI
+## Build locally
 
-Every relevant push to `main`:
-
-1. Loads the actual `model/project-zoe.blend` with automatic script execution disabled.
-2. Renders a white-model image using **Blender 5.0.1 / Cycles CPU**.
-3. Produces desktop and mobile WebP crops with content-hashed filenames.
-4. Builds and checks the static site. `render-manifest.json` records the source model hash, render script hash, commit, Blender version, render settings and output image hashes.
-5. Publishes the result to **GitHub Pages** at <https://e7h4n.github.io/project-zoe/>.
-
-Pull requests render and upload a downloadable `rendered-website` Actions artifact, but do not deploy. Manual builds are available from the Actions tab. Actions are pinned to commit SHAs. Rendering has read-only repository permissions, no project secrets, and does not commit generated images back into the repository. Deployment has only the additional Pages/OIDC permissions it needs.
-
-The existing `project-zoe.okou.app` URL is an initial snapshot, not an automatic CI deployment target. GitHub Pages is the continuously rendered site. No Okou account or credential is needed to build or deploy this repository.
-
-### Render locally
-
-Use Python 3.11 on Linux. `bpy` is a large dependency (the headless Blender Python module); a GPU is not required.
+Use Python 3.11 and Node.js 22 on Linux. `bpy` is the large headless Blender Python module; no GPU or Blender executable is required to export.
 
 ```sh
 python3.11 -m venv .venv
 . .venv/bin/activate
-pip install -r requirements-render.txt
-python scripts/render_site.py --out dist
-python scripts/check_site.py dist
+pip install -r requirements-export.txt
+npm ci
+npm run build
 python -m http.server 8080 --directory dist
 ```
 
-Open <http://localhost:8080>. For a faster draft, pass `--samples 8` to the render script. Ubuntu may also need `libegl1 libgl1 libxkbcommon0 libxi6 libxrender1`; the CI workflow installs these explicitly.
+Open <http://localhost:8080>. Ubuntu may also need `libegl1 libgl1 libxkbcommon0 libxi6 libxrender1`; the workflow installs these explicitly.
+
+To run the browser checks:
+
+```sh
+npx playwright install --with-deps chromium
+npm test
+```
+
+Software WebGL is enabled for headless CI. Tests write desktop, mobile and rotated screenshots to `test-results/`. To test with an existing Chromium executable, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
 
 ### Edit the model
 
-Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit the model, save and commit. The next CI build renders the changed geometry automatically. Keep the three product object names and `Studio_ground` intact; the render script checks for the expected assembly. Camera, white material and studio render settings are defined in `scripts/render_site.py` so the website framing remains consistent.
-
-### Why not load `.blend` directly in the browser?
-
-Browsers do not natively display Blender project files. This website intentionally serves lightweight rendered images rather than a 3D runtime. An interactive viewer would use an exported **GLB/glTF** model with Three.js or `<model-viewer>`, not the `.blend` itself. That can be added later without changing the Blender source-of-truth approach.
+Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit. Preserve the three product object names: `BrewDuo_C_shell_5mm`, `Triangular_pyramid_arm_flat_face_UP`, and `weighed_base`. The next CI build exports the changed geometry and updates the interactive website. The source keeps its aluminum finish; white materials are applied during export only. Camera framing, lighting and controls are in `web/viewer.js`.
 
 ## Base geometry
 
@@ -71,14 +98,14 @@ The seat diameter is a user-specified nominal bottom diameter for a HARIO 360 mL
 
 ![Radial S-transition section](docs/section.png)
 
-Rebuild the base separately (CadQuery is not needed for website rendering):
+Rebuild the base separately (CadQuery is not needed for website export):
 
 ```sh
 pip install cadquery==2.8.0
 python scripts/build_base.py
 ```
 
-This updates the base STEP/STL only; it does **not** silently modify the Blender assembly. Replace `weighed_base` in Blender with the resulting STL, preserve the material and normals setup, and save before committing to update website geometry.
+This updates the base STEP/STL only; it does **not** silently modify the Blender assembly. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry.
 
 ## Status and safety
 
@@ -86,4 +113,4 @@ This updates the base STEP/STL only; it does **not** silently modify the Blender
 
 ## License
 
-[MIT](LICENSE), covering the authored code, model, CAD and artwork in this repository. Provided as-is, without warranty. Third-party trademarks are not licensed.
+[MIT](LICENSE) for the authored code, model, CAD and artwork. Provided as-is, without warranty. Third-party trademarks are not licensed. Three.js and the Draco decoder retain their respective MIT and Apache-2.0 licenses; see [third-party notices](THIRD_PARTY_NOTICES.txt), also included in the built site.
