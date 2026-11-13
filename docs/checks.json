@@ -1,37 +1,18 @@
 {
-  "units": "mm",
+  "upper_edge_radius_mm": 0.35,
+  "plan_corner_radius_mm": 8,
   "valid": true,
   "solids": 1,
-  "base_envelope": [
-    100.0,
-    170.0000001,
-    5.000000100000001
-  ],
-  "recess_center": [
-    0,
-    125
-  ],
-  "filter_center": [
-    0,
-    125
-  ],
-  "flat_seat_diameter": 85,
-  "floor_z": 4.5,
-  "depth": 0.5,
-  "remaining_thickness": 4.5,
-  "transition_radii": [
-    0.25,
-    0.25
-  ],
-  "transition_radial_width": 0.5,
-  "transition_outer_diameter": 86,
-  "transition": "two exact tangent quarter circles, opposite signed curvature",
-  "base_plan_corner_radius": 8,
-  "exterior_edge_radius": 0.35,
-  "added_volume": 0.0,
-  "removed_volume": 2870.7378740367158,
-  "fixed_intersection": 0.0,
-  "fixed_clearance": 0.7999999999999998,
-  "radius_source": "User instructed bottom diameter 85 mm for HARIO 360 mL server, not supplier-verified CAD",
-  "export_scope": "STEP/STL are the weighed base only. Blender is the exterior assembly; scale internals remain unengineered."
+  "fixed_overlap_mm3": 0.0,
+  "minimum_gap_mm": 0.7999999999999972,
+  "restored_rear_wings_y": 0,
+  "central_notch": {
+    "x": [
+      -25.8,
+      25.8
+    ],
+    "y_end": 12
+  },
+  "seat_D85_depth_0_5_preserved": true,
+  "scope": "Appearance prototype. Hollow cover retained. No sensor fit/manufacturing validation."
 }

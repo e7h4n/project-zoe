@@ -46,8 +46,9 @@ The website now loads an actual GLB, not a pre-rendered image. The `.blend` rema
 | Path | Contents |
 | --- | --- |
 | `model/project-zoe.blend` | Complete exterior assembly, original aluminum materials, camera and studio lights. Blender 5.0.1. |
-| `cad/base.step` | Engineering solid of the recessed weighing base **only**, not the complete assembly. |
-| `cad/base-before-recess.step` | Rounded base before the circular recess. |
+| `cad/base.step` | Approved hollow weighing cover with restored rear side wings and R0.35 upper edges; not the complete assembly. |
+| `cad/fixed-base-local.step` | Local fixed rear joint and integrated flat floor, used for clearance checks; not the full upright. |
+| `cad/base-before-recess.step` | Historical solid base before the circular recess, not the current cover. |
 | `scripts/build_base.py` | Parametric CadQuery construction of the recessed base. |
 | `scripts/export_glb.py` | Headless Blender → compressed GLB export. |
 | `scripts/build_site.mjs` | Export, bundle and assemble the static website. |
@@ -88,9 +89,12 @@ Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit.
 
 ## Base geometry
 
-- Overall base: **100 × 170 × 5 mm**; R8 plan corners, nominal R0.35 exposed perimeter edges.
+- Overall base assembly envelope: **100 × 170 × 5 mm**; cover R8 plan corners and **R0.35 upper perimeter edges**.
+- Independent hollow weighing cover: top Z5, underside Z3.8, skirt bottom Z0.8; nominal top/side thickness **1.2 mm** (local rounding and reliefs vary).
+- Restored rear side wings extend to Y0 and wrap around the upright, with the central notch X±25.8 ending at Y12. No full-width forward rear closure.
+- Fixed upright and flat bottom plate are united in the Blender source. The floor is 96 × 154 × 1.2 mm, spanning Y14–168; no separate raised perimeter frame.
 - Circular flat seat: **Ø85 mm**, centered at **X0 / Y125**, coaxial with the dripper support.
-- Recess: **0.5 mm** deep; remaining floor thickness **4.5 mm**.
+- Recess: **0.5 mm** deep; nominal remaining cover roof thickness beneath its flat region is **0.7 mm**. This is an appearance prototype, not a validated structural thickness.
 - S transition: two tangent, oppositely curved **R0.25** quarter circles, tangent to both planes. Radial blend width **0.5 mm**, outer transition diameter **Ø86 mm**.
 - Rear mating/connection edges are deliberately excluded from exterior edge rounding.
 
@@ -105,7 +109,7 @@ pip install cadquery==2.8.0
 python scripts/build_base.py
 ```
 
-This updates the base STEP/STL only; it does **not** silently modify the Blender assembly. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry.
+This updates the cover STEP/STL and `docs/checks.json` only; it does **not** silently modify the Blender assembly. It also checks clearance against `cad/fixed-base-local.step`. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry. Internal cavity, fastening and sensor fit remain unvalidated.
 
 ## Status and safety
 
