@@ -12,6 +12,12 @@ const viewButtons = [...document.querySelectorAll('[data-view]')];
 const caption = document.querySelector('#view-caption');
 const presets = {
   overall: { text: 'Silver anodized aluminum. A satin finish, considered from every angle.' },
+  front: { eye: [0, 700, 160], target: [0, 85, 160], span: 365, text: 'Front elevation. Circle, support and base share the same centerline.' },
+  side: { eye: [-600, 85, 160], target: [0, 85, 160], span: 365, text: 'Side elevation. See the vertical upright and the bends connecting crown and base.' },
+  top: { eye: [0, 85, 700], target: [0, 85, 160], span: 270, text: 'From above. The circular crown and dripper support align with the seat below.' },
+  crown: { eye: [-90, 195, 410], target: [0, 107, 308], span: 85, text: 'The arm widens into the crown through a continuous tangent transition.' },
+  crownUnderside: { eye: [-90, 210, 215], target: [0, 107, 306], span: 85, text: 'The same crown connection from below, revealing the continuous lower rim.' },
+  upperBend: { eye: [-110, 120, 355], target: [0, 44, 308], span: 125, text: 'Follow the upright into the upper bend and downset arm, with continuous softened edges.' },
   surface: { eye: [-155, 315, 220], target: [0, 96, 13], span: 205, text: 'Ø85 mm seat, recessed 0.5 mm. The weighing cover remains independent of the fixed base.' },
   rear: { eye: [-125, 235, 145], target: [0, 12, 12], span: 90, text: 'The original rear contour wraps around the upright, with clearance at the central joint.' },
   edge: { eye: [-135, 270, 65], target: [-30, 150, 3], span: 65, text: 'R0.35 mm upper edges meet R8 plan corners. A finer, more defined perimeter.' },
@@ -136,7 +142,7 @@ async function init() {
     }
     activeView = id;
     host.dataset.view = id;
-    floor.visible = !['underside', 'rearUnderside'].includes(id);
+    floor.visible = !['underside', 'rearUnderside', 'crownUnderside'].includes(id);
     viewButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.view === id)));
     caption.textContent = preset.text;
     camera.zoom = 1;

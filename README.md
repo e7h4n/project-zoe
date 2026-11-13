@@ -22,7 +22,7 @@ An open-source pour-over stand concept. A circular crown, a dripper support, and
 | `R`, `Home`, or **Reset view** | Restore the initial view |
 | Detail buttons | Smoothly frame the selected detail; continue orbiting, panning and zooming freely |
 
-Six preset buttons cover **Overall**, **Weighing surface** (Ø85 seat), **Rear joint**, **Edge radius** (R0.35 upper edge), **Underside** (contour-matched plate) and **Rear underside** (rear wings/stand connection). Their targets are defined in original design millimeters, converted to the displayed model space, and reframed for desktop and mobile aspect ratios. Selected buttons expose `aria-pressed`; reduced-motion users get immediate camera changes. Reset always returns to the overall composition.
+Twelve preset buttons cover **Overall**, **Front**, **Side**, **Top**, **Crown joint** (tangent flare), **Crown underside**, **Upper bend**, **Weighing surface** (Ø85 seat), **Rear joint**, **Edge radius** (R0.35 upper edge), **Underside** (contour-matched plate) and **Rear underside** (rear wings/stand connection). Their targets are defined in original design millimeters, converted to the displayed model space, and reframed for desktop and mobile aspect ratios. Selected buttons expose `aria-pressed`; reduced-motion users get immediate camera changes. Reset always returns to the overall composition.
 
 The viewer uses Three.js and OrbitControls. Context menus are suppressed **only inside the 3D canvas**. It renders on demand, with damping while moving; it does not auto-rotate. Keyboard focus is visible, and the model can be downloaded if WebGL is unavailable.
 
@@ -35,7 +35,7 @@ Every relevant push to `main`:
 3. Converts millimeters to glTF's meter units, uses Y-up, and applies **Draco compression**. Base display normals are smoothed while preserving >30° creases; vertices and original CAD geometry are unchanged. High-precision 20-bit position quantization keeps the small recess transition visually intact.
 4. Bundles the viewer and self-hosted Draco decoder, producing content-hashed assets. No CDN, account, project secret or external texture is needed at runtime.
 5. Validates the GLB structure, product objects, local assets and source/output hashes.
-6. Runs real Chromium tests for the silver PBR material, dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout, touch rotate/pan/pinch, all six desktop/mobile preset views, rapid switching, responsive reframing and reduced motion.
+6. Runs real Chromium tests for the silver PBR material, dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout, touch rotate/pan/pinch, all twelve desktop/mobile preset views, rapid switching, responsive reframing and reduced motion.
 7. Deploys to **GitHub Pages** at <https://e7h4n.github.io/project-zoe/>.
 
 `model-manifest.json` on the live site records the Blender-source hash, export/build scripts, dependency lockfile, commit and exported asset hashes. The full Blender source remains unchanged by export.

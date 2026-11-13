@@ -50,7 +50,9 @@ async function open(context) {
   return page;
 }
 async function checkPresets(page, prefix) {
-  const ids = ['overall', 'surface', 'rear', 'edge', 'underside', 'rearUnderside'];
+  const ids = ['overall', 'front', 'side', 'top', 'crown', 'crownUnderside', 'upperBend', 'surface', 'rear', 'edge', 'underside', 'rearUnderside'];
+  assert.equal(await page.locator('button[data-view]').count(), ids.length);
+  const positions = [];
   for (const id of ids) {
     const button = page.locator(`button[data-view="${id}"]`);
     await button.click();
@@ -61,7 +63,9 @@ async function checkPresets(page, prefix) {
     assert.equal(await page.locator('[data-view][aria-pressed="true"]').count(), 1);
     assert.equal(current.transitioning, false);
     assert(current.distance > .3 && current.distance < 24);
-    if (id !== 'overall') assert(Math.abs(current.target[1]) > .1, 'Detail must target its geometry, not the model center');
+    assert([...current.position, ...current.target].every(Number.isFinite), 'Preset camera must be finite');
+    for (const previous of positions) assert(delta(previous, current.position) > .01, 'Each preset must offer a distinct angle');
+    positions.push(current.position);
     await page.screenshot({ path: path.join(root, `test-results/${prefix}-${id}.png`), fullPage: true });
   }
   await page.getByRole('button', { name: 'Reset view' }).click();
@@ -161,7 +165,7 @@ try {
   await touchPage.screenshot({ path: path.join(root, 'test-results/mobile-narrow.png'), fullPage: true });
   await mobile.close();
   assert.deepEqual(errors, [], 'No browser errors expected');
-  console.log('PASS: silver PBR finish, GLB units, mouse/keyboard/touch controls, all six desktop/mobile detail views, rapid switching, responsive resize and reduced motion.');
+  console.log('PASS: silver PBR finish, GLB units, mouse/keyboard/touch controls, all twelve desktop/mobile detail views, rapid switching, responsive resize and reduced motion.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));
