@@ -12,17 +12,17 @@ const viewButtons = [...document.querySelectorAll('[data-view]')];
 const caption = document.querySelector('#view-caption');
 const presets = {
   overall: { text: 'Silver anodized aluminum. A satin finish, considered from every angle.' },
-  front: { eye: [0, 700, 160], target: [0, 85, 160], span: 365, text: 'Front elevation. Circle, support and base share the same centerline.' },
-  side: { eye: [-600, 85, 160], target: [0, 85, 160], span: 365, text: 'Side elevation. See the vertical upright and the bends connecting crown and base.' },
-  top: { eye: [0, 85, 700], target: [0, 85, 160], span: 270, text: 'From above. The circular crown and dripper support align with the seat below.' },
-  crown: { eye: [-90, 195, 410], target: [0, 107, 308], span: 85, text: 'The arm widens into the crown through a continuous tangent transition.' },
-  crownUnderside: { eye: [-90, 210, 215], target: [0, 107, 306], span: 85, text: 'The same crown connection from below, revealing the continuous lower rim.' },
-  upperBend: { eye: [-110, 120, 355], target: [0, 44, 308], span: 125, text: 'Follow the upright into the upper bend and downset arm, with continuous softened edges.' },
-  surface: { eye: [-155, 315, 220], target: [0, 96, 13], span: 205, text: 'Ø85 mm seat, recessed 0.5 mm. The weighing cover remains independent of the fixed base.' },
-  rear: { eye: [-125, 235, 145], target: [0, 12, 12], span: 90, text: 'The original rear contour wraps around the upright, with clearance at the central joint.' },
-  edge: { eye: [-135, 270, 65], target: [-30, 150, 3], span: 65, text: 'R0.35 mm upper edges meet R8 plan corners. A finer, more defined perimeter.' },
-  underside: { eye: [-155, 315, -220], target: [0, 85, 1], span: 205, text: 'The fixed bottom plate follows the cover contour, with a nominal 0.8 mm side gap.' },
-  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Contour-matched rear wings and the integrated stand connection, seen from below.' },
+  front: { eye: [0, 700, 58], target: [0, 85, 58], span: 205, text: 'Front elevation. A fixed, level dripper ring above the original continuous weighing surface.' },
+  side: { eye: [-600, 85, 58], target: [0, 85, 58], span: 205, text: 'Side elevation. Manual fixed support; no automated head or adjustable arm.' },
+  top: { eye: [0, 85, 700], target: [0, 85, 58], span: 205, text: 'From above. The manual ring and recessed carafe seat share center X0 / Y125.' },
+  crown: { eye: [-90, 195, 210], target: [0, 115, 116], span: 90, text: 'Fixed manual ring. Nominal outer diameter 60 mm, inner diameter 48 mm.' },
+  crownUnderside: { eye: [-90, 210, 45], target: [0, 115, 114], span: 90, text: 'Level ring underside. Nominal seat-to-ring clearance 109 mm; dripper outlet clearance unverified.' },
+  upperBend: { eye: [-110, 120, 165], target: [0, 35, 113], span: 100, text: 'The fixed upper support replaces the historical automated crown and adjustable arm.' },
+  surface: { eye: [-155, 315, 220], target: [0, 96, 13], span: 205, text: 'Original continuous weighing surface and Ø85 mm seat, recessed 0.5 mm.' },
+  rear: { eye: [-125, 235, 145], target: [0, 12, 12], span: 90, text: 'Original rear base joint retained, with clearance around the upright root.' },
+  edge: { eye: [-135, 270, 65], target: [-30, 150, 1], span: 65, text: 'Outer skirt extended downward to conceal the new inset ground plate. Nominal table gap 0.5 mm, not load-validated.' },
+  underside: { eye: [-155, 315, -220], target: [0, 85, 0], span: 205, text: 'Three-layer serial concept: cover C, integrated floor/upright M, inset ground plate G. Sensors are not installed.' },
+  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Rear notch clearance retained. Ground plate 94 × 164 × 2 mm is a provisional envelope.' },
 };
 let renderer;
 let controls;
@@ -176,8 +176,8 @@ async function init() {
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
     renderer.setSize(width, height, false);
-    // A 3-unit-high model, with room for its base at narrow aspect ratios.
-    homeDistance = Math.max(3.55, 2.25 / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
+    // A model normalized to a 3-unit maximum extent, with framing margin.
+    homeDistance = Math.max(4.1, 2.65 / camera.aspect) / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
     if (ready && activeView) selectView(activeView, false);
     else if (ready) camera.position.sub(controls.target).multiplyScalar(homeDistance / oldHome).add(controls.target);
     else camera.position.copy(homeDirection).multiplyScalar(homeDistance);
@@ -237,11 +237,12 @@ async function init() {
   if (!Number.isFinite(size.y) || size.y <= 0) throw new Error('The GLB has invalid bounds');
   // Normalize display only: the downloadable GLB retains true meter units.
   gltf.scene.position.sub(center);
-  displayScale = 3 / size.y;
+  displayScale = 3 / Math.max(size.x, size.y, size.z);
+  floor.position.y = -size.y * displayScale / 2 - .005;
   toDisplay = ([x, y, z]) => new THREE.Vector3(x * .001, z * .001, -y * .001).sub(center).multiplyScalar(displayScale);
   const model = new THREE.Group();
   model.add(gltf.scene);
-  model.scale.setScalar(3 / size.y);
+  model.scale.setScalar(displayScale);
   model.traverse(obj => {
     if (obj.isMesh) {
       // A restrained base-contact shadow avoids distracting projected arm silhouettes.

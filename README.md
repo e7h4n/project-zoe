@@ -1,74 +1,64 @@
 # Project Zoe
 
-**The ultimate elegant coffee brewing tool.**
-
-An open-source pour-over stand concept. A circular crown, a dripper support, and a slender base. Explore the real 3D assembly in satin silver anodized aluminum, with one-click views of the important design details.
+**An open-source manual pour-over stand concept in satin silver aluminum.**
 
 [Interactive website](https://e7h4n.github.io/project-zoe/) · [Blender source](model/project-zoe.blend)
 
-![Project Zoe silver interactive website](docs/site-preview.png)
+![Manual stand with concealed bottom plate](docs/three-layer/after-skirt-overall.png)
 
-## 3D controls
+## Current revision
 
-| Input | Action |
+- Fixed, level manual dripper ring replaces the historical automated crown and adjustable arm.
+- Original continuous weighing surface, recessed carafe seat and rear base joint retained.
+- Three-layer serial weighing concept: table → new ground plate G → total-load sensor → integrated floor/upright M → carafe sensor → cover C.
+- Only the cover's exterior skirts extend downward, concealing G without a new seam across the weighing surface. Rear-notch inner walls retain their clearance.
+- **Sensors and their mounts are not yet installed or selected.** One sensor per interface is preferred, subject to eccentric-load, moment and capacity verification. The model is not a working scale.
+
+After common tare, the total channel would measure system mass increment, the carafe channel beverage increment, and their difference approximately dripper-retained water. Evaporation, leaks, dynamic forces, channel timing and drift affect this estimate.
+
+## Nominal geometry
+
+| Feature | Design dimension |
 | --- | --- |
-| Left mouse drag | Orbit / rotate |
-| Right mouse drag | Pan |
-| Mouse wheel / middle drag | Zoom |
-| One-finger drag | Rotate |
-| Two-finger drag / pinch | Pan / zoom |
-| Arrow keys (viewer focused) | Pan |
-| `+` / `−` (viewer focused) | Zoom |
-| `R`, `Home`, or **Reset view** | Restore the initial view |
-| Detail buttons | Smoothly frame the selected detail; continue orbiting, panning and zooming freely |
+| Cover plan envelope | 100 × 170 mm, R8 plan corners |
+| Cover top / carafe seat | Z5 / Z4.5 mm; Ø85 mm seat at X0/Y125 |
+| Cover roof underside / floor top | Z3.8 / Z2 mm; only 1.8 mm original upper cavity |
+| Outer skirt bottom | Z−3.5 mm, extended 4.3 mm from Z0.8 |
+| New inset ground plate G | 94 × 164 × 2 mm, R8; center X0/Y85; Z−4 to −2 |
+| Overall base height | 9 mm, Z−4 to Z5; no longer the historical 5 mm envelope |
+| Nominal skirt/table gap | 0.5 mm, **not validated under load or tolerance stack-up** |
+| Fixed ring | OD60 / ID48 mm, center X0/Y125, Z113.5–118.5 |
+| Seat-to-ring underside | 109 mm; nominal 99 mm server leaves 10 mm to ring, not necessarily dripper outlet |
 
-Twelve preset buttons cover **Overall**, **Front**, **Side**, **Top**, **Crown joint** (tangent flare), **Crown underside**, **Upper bend**, **Weighing surface** (Ø85 seat), **Rear joint**, **Edge radius** (R0.35 upper edge), **Underside** (contour-matched plate) and **Rear underside** (rear wings/stand connection). Their targets are defined in original design millimeters, converted to the displayed model space, and reframed for desktop and mobile aspect ratios. Selected buttons expose `aria-pressed`; reduced-motion users get immediate camera changes. Reset always returns to the overall composition.
+Extending the skirt does **not** enlarge the original C/M cavity. Ground-plate size and gaps are provisional. No claim of sensor fit, loaded clearance or manufacturing readiness is made. The carafe seat dimension is a design input, not an independently verified HARIO specification.
 
-The viewer uses Three.js and OrbitControls. Context menus are suppressed **only inside the 3D canvas**. It renders on demand, with damping while moving; it does not auto-rotate. Keyboard focus is visible, and the model can be downloaded if WebGL is unavailable.
-
-## Blender → GLB → website CI
-
-Every relevant push to `main`:
-
-1. Opens the actual `model/project-zoe.blend` in headless **Blender 5.0.1**, with automatic script execution disabled.
-2. Exports only the three product meshes, applying modifiers and a silver anodized aluminum PBR material in memory (metallic 1, roughness 0.32). Cameras, studio lights, floor and accessory proxies are excluded.
-3. Converts millimeters to glTF's meter units, uses Y-up, and applies **Draco compression**. Base display normals are smoothed while preserving >30° creases; vertices and original CAD geometry are unchanged. High-precision 20-bit position quantization keeps the small recess transition visually intact.
-4. Bundles the viewer and self-hosted Draco decoder, producing content-hashed assets. No CDN, account, project secret or external texture is needed at runtime.
-5. Validates the GLB structure, product objects, local assets and source/output hashes.
-6. Runs real Chromium tests for the silver PBR material, dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout, touch rotate/pan/pinch, all twelve desktop/mobile preset views, rapid switching, responsive reframing and reduced motion.
-7. Deploys to **GitHub Pages** at <https://e7h4n.github.io/project-zoe/>.
-
-`model-manifest.json` on the live site records the Blender-source hash, export/build scripts, dependency lockfile, commit and exported asset hashes. The full Blender source remains unchanged by export.
-
-Pull requests build and upload an `interactive-website-and-qa` Actions artifact, including the GLB and browser screenshots, but **do not deploy**. Manual builds are available from the Actions tab. Actions are pinned to commit SHAs. Build/test has read-only repository access; deployment has only the additional Pages/OIDC permissions it needs. Failed browser tests block deployment.
-
-The website now loads an actual GLB, not a pre-rendered image. The `.blend` remains the editable source of truth. `docs/preview.png` is a static documentation illustration. The original <https://project-zoe.okou.app> page is a separate historical snapshot, not the automatic CI target.
+![Concealed bottom close view](docs/three-layer/after-skirt-close.png)
 
 ## Source files
 
 | Path | Contents |
 | --- | --- |
-| `model/project-zoe.blend` | Complete exterior assembly, original aluminum materials, camera and studio lights. Blender 5.0.1. |
-| `cad/base.step` | Approved hollow weighing cover with restored rear side wings and R0.35 upper edges; not the complete assembly. |
-| `cad/fixed-base-local.step` | Local fixed rear joint and integrated contour-matched flat floor, used for clearance checks; not the full upright. |
-| `cad/upper-tangent.step` | Exact upper solid from Z294 upward, including bend, downset and tangent crown transition; not the full upright or assembly. |
-| `scripts/build_upper.py` | Builds the C2 plan transition and applies R0.35 after exact solid union. |
-| `scripts/apply_upper.py` | Replaces the upper portion of the Blender shell with that CAD-derived mesh. |
-| `cad/fixed-rear-joint.step` | Retained original central joint, used by `scripts/build_floor.py` to rebuild the fixed base. |
-| `cad/base-before-recess.step` | Historical solid base before the circular recess, not the current cover. |
-| `scripts/build_base.py` | Parametric CadQuery construction of the recessed base. |
-| `scripts/export_glb.py` | Headless Blender → compressed GLB export. |
-| `scripts/build_site.mjs` | Export, bundle and assemble the static website. |
-| `scripts/check_site.py` | GLB, asset and provenance validation. |
-| `scripts/test_viewer.mjs` | Real browser mouse, keyboard, touch and responsive tests. |
-| `web/` | Responsive page and interactive Three.js viewer. |
-| `docs/` | Static previews, section detail and geometric checks. |
+| `model/project-zoe.blend` | Current three-layer manual assembly, studio camera and lighting; Blender 5.0.1 |
+| `cad/base.step` | Current cover with extended exterior skirts; unchanged upper surface |
+| `cad/ground-plate-concept.step` | Provisional new inset ground plate G |
+| `cad/manual-fixed-upper.step` | Nominal manual upper support solid; Blender mesh has local edge softening |
+| `cad/fixed-base-local.step` | Retained original integrated floor/rear-joint CAD, not full upright |
+| `docs/three-layer/` | Nominal CAD checks, preservation fingerprints and current renders |
+| `scripts/check_model.py` | Current mesh topology, floor, seat, ring and ground-plate geometry checks |
+| `scripts/export_glb.py` | Current three-object Blender → compressed GLB export |
+| `web/` | Interactive Three.js viewer with twelve desktop/mobile camera presets |
 
-The Blender scene uses millimeters. There are no external textures or supplier CAD dependencies. Hidden accessory proxies and unrelated scene objects have been removed from the published model.
+Other CAD, renders and reconstruction scripts are **historical studies**, not the current complete assembly. In particular, `build_base.py`, `build_upper.py`, `rebuild_rounded_shell.py`, `apply_upper.py` and `check_historical_automatic_model.py` describe the older automated-crown design and must not be used to regenerate the current assembly. The complete prior version is retained in [Git history at a0b18dd](https://github.com/e7h4n/project-zoe/tree/a0b18dd297a377172f05ef80fcb6f4c9e32a9d0a). There is no complete parametric CAD regeneration pipeline for the new assembly yet.
 
-## Build locally
+CAD comparisons confirm no changed upper cover volume above Z1.1 and no nominal intersection with the original fixed base or G. Mesh checks confirm manifold geometry and unchanged middle/ground mesh fingerprints during skirt extension. These checks do not evaluate deflection, contact under load, tolerances or real weighing behavior.
 
-Use Python 3.11 and Node.js 22 on Linux. `bpy` is the large headless Blender Python module; no GPU or Blender executable is required to export.
+## Interactive controls
+
+Left drag / one finger: orbit. Right drag: pan. Wheel: zoom. Two fingers: pan/pinch. Focus the canvas for arrow-key pan, `+`/`−` zoom and `R`/`Home` reset. Twelve preset buttons include elevations, ring details, weighing surface, rear joint, skirt and underside. Reduced motion is respected; rendering is on demand.
+
+## Build and deployment
+
+Use Python 3.11 and Node.js 22 on Linux:
 
 ```sh
 python3.11 -m venv .venv
@@ -79,81 +69,21 @@ npm run build
 python -m http.server 8080 --directory dist
 ```
 
-Open <http://localhost:8080>. Ubuntu may also need `libegl1 libgl1 libxkbcommon0 libxi6 libxrender1`; the workflow installs these explicitly.
-
-To run the browser checks:
+Build opens Blender with script auto-execution disabled, validates current geometry and exports only `BrewDuo_C_shell_5mm`, `weighed_base` and `New_recessed_ground_plate_CONCEPT`. Studio objects are excluded. Millimeters convert to glTF meters/Y-up; silver PBR material is applied in memory without changing the source. Draco and viewer assets are self-hosted and content-hashed.
 
 ```sh
 npx playwright install --with-deps chromium
 npm test
 ```
 
-Software WebGL is enabled for headless CI. Tests write desktop, mobile and rotated screenshots to `test-results/`. To test with an existing Chromium executable, set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`.
+Tests cover materials, dimensions, mouse/touch/keyboard controls, all twelve desktop/mobile views, responsive framing and reduced motion. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` for an installed Chromium. Relevant pushes to `main` run build/tests before GitHub Pages deployment. PRs upload QA artifacts without deploying. The live `model-manifest.json` records source, script, dependency, commit and asset hashes. The separate original `project-zoe.okou.app` page is historical, not this CI target.
 
-### Edit the model
+## Status and next engineering work
 
-Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit. Preserve the three product object names: `BrewDuo_C_shell_5mm`, `Triangular_pyramid_arm_flat_face_UP`, and `weighed_base`. The next CI build exports the changed geometry and updates the interactive website. The source keeps its aluminum finish; the consistent silver PBR material is applied during export only. The browser uses studio environment reflections to show the satin finish; this is an appearance approximation, not a measured anodizing specification. Camera framing, named detail views, lighting and controls are in `web/viewer.js`.
+**Design concept, not manufacturing-ready hardware.** A 1–2000 g net range and 0.1 g display increment are goals, not verified ±0.1 g accuracy. Total-stage capacity must include the stand, utensils and contents; tare does not reduce mechanical loading.
 
-## Base geometry
-
-- Overall base assembly envelope: **100 × 170 × 5 mm**; cover R8 plan corners and **R0.35 upper perimeter edges**.
-- Independent hollow weighing cover: top Z5, underside Z3.8, skirt bottom Z0.8; nominal top/side thickness **1.2 mm** (local rounding and reliefs vary).
-- Restored rear side wings extend to Y0 and wrap around the upright, with the central notch X±25.8 ending at Y12. No full-width forward rear closure.
-- Fixed upright and flat bottom plate are united in the Blender source. The floor follows the cover contour, including the rear side wings: **96 × 166 × 2.0 mm**, spanning Y2–168, with R6 plan corners. Its contour is inset 2 mm from the cover exterior, giving a nominal **0.8 mm side gap** to the 1.2 mm skirt. The floor notch is X±27.8 through Y14; the original central stand tongue is retained. No separate raised perimeter frame.
-- The fixed floor and retained central tongue now share **Z2.0**: the former 0.8 mm step at Y32 is removed. Nominal vertical space below the Z3.8 cover roof is **1.8 mm**.
-- The short downturned lip at the central rear notch (X±25.8, Y12–13.2) is removed below Z3.8. The top surface, rear side wings and other cover skirts are retained.
-- The upright's exposed longitudinal edges have a real **R0.35 mm** rounded mesh profile, continuing along the inner lower bend **and through the upper bend, downset arm and both circular crown rims**. The upper structure is now rebuilt as an exact solid and rounded **after** union, rather than rounding overlapping mesh parts. `scripts/check_model.py` verifies topology, upright and upper-rim cross-sections, and actual flare contour against CAD parameters.
-- The crown remains **R22, centered X0/Y125, Z305–310**. Its side rails now widen smoothly from the arm between **Y94 and Y118**, using quintic Beziers matching position, tangent and curvature (C2) to both straight taper and circle. The downset ends at Y94 with zero slope and curvature; its total drop remains 10 mm. This replaces the former abrupt arm/circle intersection, not merely its shading.
-- The upright front/back planes remain vertical and **90° to the fixed floor**. The upright narrows in plan width, but its guide direction does not lean. The support-ring center remains **X0/Y125** during ideal vertical translation. `docs/geometry-checks.json` records sampled planes and fitted ring-center coordinates at three heights. This is a geometry check, **not** validation of a real slider/lock or its tolerances.
-- `scripts/rebuild_rounded_shell.py` rebuilds the lower assembly from pinned source `7aaa157` and current generated floor/cover STLs, then calls `apply_upper.py` with the new upper CAD mesh. It overwrites `model/project-zoe.blend`.
-- Circular flat seat: **Ø85 mm**, centered at **X0 / Y125**, coaxial with the dripper support.
-- Recess: **0.5 mm** deep; nominal remaining cover roof thickness beneath its flat region is **0.7 mm**. This is an appearance prototype, not a validated structural thickness.
-- S transition: two tangent, oppositely curved **R0.25** quarter circles, tangent to both planes. Radial blend width **0.5 mm**, outer transition diameter **Ø86 mm**.
-- Rear mating/connection edges are deliberately excluded from exterior edge rounding.
-
-The seat diameter is a user-specified nominal bottom diameter for a HARIO 360 mL server, **not** an independently verified manufacturer dimension. No extra radial fit allowance has been added. HARIO is a third-party trademark; this project is not affiliated with or endorsed by HARIO.
-
-![Radial S-transition section](docs/section.png)
-
-Rebuild the base separately (CadQuery is not needed for website export):
-
-```sh
-pip install cadquery==2.8.0
-python scripts/build_floor.py
-python scripts/build_base.py
-python scripts/build_upper.py
-# In the Blender Python environment, after all three CAD generators:
-python scripts/rebuild_rounded_shell.py
-```
-
-`build_floor.py` rebuilds the local fixed floor/joint CAD and `docs/floor-checks.json` from the retained joint. `build_base.py` updates the cover STEP/STL and `docs/checks.json` only; it does **not** silently modify the Blender assembly. It also checks clearance against `cad/fixed-base-local.step`. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry. Internal cavity, fastening and sensor fit remain unvalidated.
-
-### Approved edge and floor revision
-
-![R0.35 upright edge detail](docs/upright-edges.png)
-
-`cad/center-section-AA.dxf` contains the revised exact X0 local CAD section; `cad/bottom-half-section.step` is a half-section of those local solids. They describe the floor/cover revision, **not** a complete parameterized upright. The lower upright edge fillets remain authored in the Blender mesh. The upper structure from Z294 upward now has its own exact solid in `cad/upper-tangent.step`; there is still no single complete parameterized upright/assembly. `docs/upright-radius-check.json` and `docs/geometry-checks.json` record current mesh measurements. The upper mesh uses 0.005 mm absolute STL deflection and a 0.075 rad angular limit; mesh-check tolerances include tessellation error and are not manufacturing tolerances.
-
-Every website build checks source topology, uniform Z2 floor, removed rear lip, R0.35 upright/arm/crown profiles, C2 flare contour, upright perpendicularity and ideal ring-center alignment before export.
-
-![Continuous upper bend/arm fillet](docs/upper-joint.png)
-![Rebuilt upper structure](docs/upper-underside.png)
-![Tangent crown junction, upper view](docs/crown-join.png)
-![Tangent crown junction, lower view](docs/crown-join-underside.png)
-![True orthographic side view: vertical upright and horizontal base](docs/side-orthographic.png)
-
-### Contour-matched underside
-
-![Underside with continuous contour-following clearance](docs/bottom.png)
-
-![Rear underside and stand connection](docs/rear-bottom.png)
-
-These are approved design-review renders, not evidence of sensor fit or manufacturing readiness.
-
-## Status and safety
-
-**Design concept, not manufacturing-ready hardware.** Weighing internals, electronics, mounting, tolerances, deflection under load, food-contact suitability, thermal behavior, fabrication and physical edge safety have not been engineered or certified. Numeric checks validate the stated exterior geometry, not those functional properties. Use caution with hot water and fragile glassware.
+Next: select actual sensors, fit mounts within the serial sandwich, calculate cumulative deflection/moments and tipping, establish tolerance-based gaps, design two-stage overload stops and flexible wiring without force bypasses, then test synchronized channels for repeatability, corner loading, thermal drift, creep and response delay. Food-contact suitability, sealing, fabrication and physical edge safety remain unvalidated. Use caution with hot water and glassware.
 
 ## License
 
-[MIT](LICENSE) for the authored code, model, CAD and artwork. Provided as-is, without warranty. Third-party trademarks are not licensed. Three.js and the Draco decoder retain their respective MIT and Apache-2.0 licenses; see [third-party notices](THIRD_PARTY_NOTICES.txt), also included in the built site.
+[MIT](LICENSE) for authored code, model, CAD and artwork, provided as-is. Third-party trademarks are not licensed. See [third-party notices](THIRD_PARTY_NOTICES.txt) for Three.js and Draco licenses.

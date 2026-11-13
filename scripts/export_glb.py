@@ -10,7 +10,7 @@ import bpy
 from mathutils import Matrix
 
 ROOT = Path(__file__).resolve().parents[1]
-PRODUCT_OBJECTS = ('BrewDuo_C_shell_5mm', 'Triangular_pyramid_arm_flat_face_UP', 'weighed_base')
+PRODUCT_OBJECTS = ('BrewDuo_C_shell_5mm', 'weighed_base', 'New_recessed_ground_plate_CONCEPT')
 
 
 def sha(path):

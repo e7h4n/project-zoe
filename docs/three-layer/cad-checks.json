@@ -1,0 +1,24 @@
+{
+  "valid_solid": true,
+  "solid_count": 1,
+  "cover_bottom_old_mm": 0.7999999999999998,
+  "cover_bottom_new_mm": -3.5,
+  "upper_surface_max_z_mm": 5.0,
+  "volume_added_mm3": 2407.1171477698845,
+  "overlap_original_fixed_base_mm3": 0.0,
+  "overlap_new_ground_plate_mm3": 0.0,
+  "minimum_distance_to_ground_plate_mm": 1.7999999999999972,
+  "nominal_skirt_to_table_mm": 0.5,
+  "upper_region_symmetric_difference_volume_mm3": 0.0,
+  "rear_notch_extension_keepout_xy_mm": {
+    "x": [
+      -28,
+      28
+    ],
+    "y": [
+      -2,
+      14
+    ]
+  },
+  "scope": "Nominal rigid CAD only. No sensor fit, deflection or tolerance validation."
+}

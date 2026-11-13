@@ -1,0 +1,73 @@
+{
+  "source": "/home/user/workspace/generated/brewduo/three-layer-original/Project_Zoe_three_layer_inspection.blend",
+  "stand_and_ground_plate_meshes_and_transforms_unchanged": true,
+  "fingerprints": {
+    "stand": {
+      "mesh_sha256": "1a099b84af75dd89b004f5fc815e9c101177ebee5abe95b522e0c7b5db62085f",
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "ground_plate": {
+      "mesh_sha256": "86af89d0189ad64ba1b1e8f1c53518a3c88b2efaa280353a8c1e7e67198b6626",
+      "matrix_world": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "cover_nonmanifold_edges": 0,
+  "changed_part": "weighed_base outer downward skirts only",
+  "upper_geometry_verification": "cad-checks.json upper region symmetric difference =0",
+  "cover_bottom_z_mm": -3.5,
+  "ground_plate_bottom_z_mm": -4,
+  "nominal_table_clearance_mm": 0.5,
+  "actual_sensor_fit_verified": false,
+  "dynamic_clearance_verified": false,
+  "new_file_only": true
+}
