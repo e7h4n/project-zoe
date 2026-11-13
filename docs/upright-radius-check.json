@@ -3,9 +3,9 @@
   "measurement": "Cross-section at Z50mm, resolved perpendicular to tapered upright side plane",
   "check_script": "scripts/check_model.py",
   "maximum_radial_deviation_mm_upper_bound": 0.001012,
-  "upper_arm_top_maximum_radial_deviation_mm": 0.0010702403219548517,
-  "upper_arm_bottom_maximum_radial_deviation_mm": 0.000915500001107683,
-  "crown_top_maximum_radial_deviation_mm": 0.0009178290022977542,
-  "crown_bottom_maximum_radial_deviation_mm": 0.0010715175640331753,
-  "note": "12-segment rounded mesh profile; local numeric cleanup tolerance 0.002mm. Not a manufacturing certification."
+  "upper_arm_top_maximum_radial_deviation_mm": 0.00042213829711829076,
+  "upper_arm_bottom_maximum_radial_deviation_mm": 0.00042213829711829076,
+  "crown_top_maximum_radial_deviation_mm": 0.007897121624412029,
+  "crown_bottom_maximum_radial_deviation_mm": 0.007896469623045854,
+  "note": "Lower upright: 12-segment mesh fillet. Upper structure: exact solid fillet tessellated at 0.005mm absolute deflection / 0.075rad angular limit. Measured mesh deviations include tessellation, not manufacturing tolerances."
 }

@@ -1,0 +1,6 @@
+{
+  "shell_nonmanifold_edges": 0,
+  "shell_volume_mm3": 98378.32276088276,
+  "upper_stl_tolerance_mm": 0.005,
+  "scope": "Exact upper solid joined to the existing lower mesh, not full assembly parametric CAD."
+}

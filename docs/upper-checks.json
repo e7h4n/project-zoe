@@ -1,0 +1,51 @@
+{
+  "valid": true,
+  "solid_count": 1,
+  "edge_radius_mm": 0.35,
+  "crown_radius_mm": 22,
+  "crown_center_xy": [
+    0,
+    125
+  ],
+  "crown_z_range_mm": [
+    305,
+    310
+  ],
+  "flare_y_range_mm": [
+    94.0,
+    118.0
+  ],
+  "flare_bezier_control_points_xy": [
+    [
+      7.347368421052631,
+      94.0
+    ],
+    [
+      7.1957894736842105,
+      98.8
+    ],
+    [
+      7.044210526315789,
+      103.6
+    ],
+    [
+      16.098261412065746,
+      108.4
+    ],
+    [
+      19.24565692162332,
+      113.2
+    ],
+    [
+      20.85665361461421,
+      118.0
+    ]
+  ],
+  "join_continuity": "C2 in plan at both ends of each quintic rail; zero-slope/zero-curvature downset end.",
+  "scope": "Exact solid for the upper structure only, starting Z294; not a complete manufacturing-validated assembly.",
+  "tessellation_tolerance_mm": 0.005,
+  "relative_tessellation": false,
+  "angular_tolerance_rad": 0.075,
+  "fillet_method": "R0.35 applied once after exact union of strip and crown.",
+  "downset_end_y_mm": 94.0
+}

@@ -51,6 +51,9 @@ The website now loads an actual GLB, not a pre-rendered image. The `.blend` rema
 | `model/project-zoe.blend` | Complete exterior assembly, original aluminum materials, camera and studio lights. Blender 5.0.1. |
 | `cad/base.step` | Approved hollow weighing cover with restored rear side wings and R0.35 upper edges; not the complete assembly. |
 | `cad/fixed-base-local.step` | Local fixed rear joint and integrated contour-matched flat floor, used for clearance checks; not the full upright. |
+| `cad/upper-tangent.step` | Exact upper solid from Z294 upward, including bend, downset and tangent crown transition; not the full upright or assembly. |
+| `scripts/build_upper.py` | Builds the C2 plan transition and applies R0.35 after exact solid union. |
+| `scripts/apply_upper.py` | Replaces the upper portion of the Blender shell with that CAD-derived mesh. |
 | `cad/fixed-rear-joint.step` | Retained original central joint, used by `scripts/build_floor.py` to rebuild the fixed base. |
 | `cad/base-before-recess.step` | Historical solid base before the circular recess, not the current cover. |
 | `scripts/build_base.py` | Parametric CadQuery construction of the recessed base. |
@@ -99,8 +102,10 @@ Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit.
 - Fixed upright and flat bottom plate are united in the Blender source. The floor follows the cover contour, including the rear side wings: **96 × 166 × 2.0 mm**, spanning Y2–168, with R6 plan corners. Its contour is inset 2 mm from the cover exterior, giving a nominal **0.8 mm side gap** to the 1.2 mm skirt. The floor notch is X±27.8 through Y14; the original central stand tongue is retained. No separate raised perimeter frame.
 - The fixed floor and retained central tongue now share **Z2.0**: the former 0.8 mm step at Y32 is removed. Nominal vertical space below the Z3.8 cover roof is **1.8 mm**.
 - The short downturned lip at the central rear notch (X±25.8, Y12–13.2) is removed below Z3.8. The top surface, rear side wings and other cover skirts are retained.
-- The upright's exposed longitudinal edges have a real **R0.35 mm** rounded mesh profile, continuing along the inner lower bend **and through the upper bend, downset arm and both circular crown rims**. The former bend/arm Boolean micro-steps and crown overlap crescent are cleaned before rounding, so they do not become raised fillet seams. The Blender mesh is checked for manifold topology. `scripts/check_model.py` samples the Z50 cross-section plus radial sections of both arm/crown rims to verify geometry, not just shading. This remains mesh geometry, not complete parametric solid CAD.
-- `scripts/rebuild_rounded_shell.py` reproduces the reviewed mesh from pinned source commit `7aaa157` and the STL outputs of `build_floor.py`/`build_base.py`; it overwrites `model/project-zoe.blend`. Numerical seam cleanup moves points by under 0.02 mm at the bend/arm join and under 0.08 mm at the arm/crown overlap, bringing each local join onto shared nominal surfaces.
+- The upright's exposed longitudinal edges have a real **R0.35 mm** rounded mesh profile, continuing along the inner lower bend **and through the upper bend, downset arm and both circular crown rims**. The upper structure is now rebuilt as an exact solid and rounded **after** union, rather than rounding overlapping mesh parts. `scripts/check_model.py` verifies topology, upright and upper-rim cross-sections, and actual flare contour against CAD parameters.
+- The crown remains **R22, centered X0/Y125, Z305–310**. Its side rails now widen smoothly from the arm between **Y94 and Y118**, using quintic Beziers matching position, tangent and curvature (C2) to both straight taper and circle. The downset ends at Y94 with zero slope and curvature; its total drop remains 10 mm. This replaces the former abrupt arm/circle intersection, not merely its shading.
+- The upright front/back planes remain vertical and **90° to the fixed floor**. The upright narrows in plan width, but its guide direction does not lean. The support-ring center remains **X0/Y125** during ideal vertical translation. `docs/geometry-checks.json` records sampled planes and fitted ring-center coordinates at three heights. This is a geometry check, **not** validation of a real slider/lock or its tolerances.
+- `scripts/rebuild_rounded_shell.py` rebuilds the lower assembly from pinned source `7aaa157` and current generated floor/cover STLs, then calls `apply_upper.py` with the new upper CAD mesh. It overwrites `model/project-zoe.blend`.
 - Circular flat seat: **Ø85 mm**, centered at **X0 / Y125**, coaxial with the dripper support.
 - Recess: **0.5 mm** deep; nominal remaining cover roof thickness beneath its flat region is **0.7 mm**. This is an appearance prototype, not a validated structural thickness.
 - S transition: two tangent, oppositely curved **R0.25** quarter circles, tangent to both planes. Radial blend width **0.5 mm**, outer transition diameter **Ø86 mm**.
@@ -116,6 +121,9 @@ Rebuild the base separately (CadQuery is not needed for website export):
 pip install cadquery==2.8.0
 python scripts/build_floor.py
 python scripts/build_base.py
+python scripts/build_upper.py
+# In the Blender Python environment, after all three CAD generators:
+python scripts/rebuild_rounded_shell.py
 ```
 
 `build_floor.py` rebuilds the local fixed floor/joint CAD and `docs/floor-checks.json` from the retained joint. `build_base.py` updates the cover STEP/STL and `docs/checks.json` only; it does **not** silently modify the Blender assembly. It also checks clearance against `cad/fixed-base-local.step`. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry. Internal cavity, fastening and sensor fit remain unvalidated.
@@ -124,12 +132,15 @@ python scripts/build_base.py
 
 ![R0.35 upright edge detail](docs/upright-edges.png)
 
-`cad/center-section-AA.dxf` contains the revised exact X0 local CAD section; `cad/bottom-half-section.step` is a half-section of those local solids. They describe the floor/cover revision, **not** a complete parameterized upright. The upright edge fillets are authored in the full Blender mesh; they have not been rebuilt into a full solid-CAD upright. `docs/upright-radius-check.json` records the rounded mesh-profile measurement. Tiny pre-existing mesh slivers above Z4.99 were cleaned with a 0.002 mm weld tolerance before adding the intended 12-segment fillets; other upper details were not redesigned.
+`cad/center-section-AA.dxf` contains the revised exact X0 local CAD section; `cad/bottom-half-section.step` is a half-section of those local solids. They describe the floor/cover revision, **not** a complete parameterized upright. The lower upright edge fillets remain authored in the Blender mesh. The upper structure from Z294 upward now has its own exact solid in `cad/upper-tangent.step`; there is still no single complete parameterized upright/assembly. `docs/upright-radius-check.json` and `docs/geometry-checks.json` record current mesh measurements. The upper mesh uses 0.005 mm absolute STL deflection and a 0.075 rad angular limit; mesh-check tolerances include tessellation error and are not manufacturing tolerances.
 
-Every website build now checks the source mesh topology, uniform Z2 floor, removed rear lip and R0.35 upright/arm/crown profiles (top and bottom) before export.
+Every website build checks source topology, uniform Z2 floor, removed rear lip, R0.35 upright/arm/crown profiles, C2 flare contour, upright perpendicularity and ideal ring-center alignment before export.
 
 ![Continuous upper bend/arm fillet](docs/upper-joint.png)
-![Unified arm and crown upper/lower edges](docs/upper-underside.png)
+![Rebuilt upper structure](docs/upper-underside.png)
+![Tangent crown junction, upper view](docs/crown-join.png)
+![Tangent crown junction, lower view](docs/crown-join-underside.png)
+![True orthographic side view: vertical upright and horizontal base](docs/side-orthographic.png)
 
 ### Contour-matched underside
 

@@ -1,5 +1,6 @@
 """Rebuild the reviewed mesh from the pinned pre-cover source.
-Run build_floor.py and build_base.py first to generate the two STL inputs.
+Run build_floor.py, build_base.py and build_upper.py first to generate the STL inputs.
+The final step replaces the legacy upper mesh with the rebuilt tangent solid.
 This overwrites model/project-zoe.blend; run the site build/QA afterwards.
 """
 import bpy,bmesh,os,json,math,hashlib,subprocess,tempfile
@@ -103,3 +104,6 @@ S.render.filepath='//preview.png'
 bpy.ops.object.select_all(action='DESELECT');cover.select_set(True);bpy.context.view_layer.objects.active=cover
 bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'model/project-zoe.blend'),compress=True)
 (O/'bottom-blender-checks.json').write_text(json.dumps({'original_model_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'upper_evaluated_vertex_count_checked':len(before),'upper_prebevel_vertex_max_movement_mm':max_delta,'upright_bevel_radius_mm':.35,'upright_beveled_edge_count':bevel_count,'numerical_cleanup_weld_tolerance_mm':.002,'fixed_base_is_unioned_into_stand':True,'mesh_checks':mesh_checks,'original_source_not_overwritten':True},indent=2))
+# Replace the superseded hard crown join with the current exact upper solid.
+import runpy
+runpy.run_path(str(ROOT/'scripts/apply_upper.py'),run_name='__main__')

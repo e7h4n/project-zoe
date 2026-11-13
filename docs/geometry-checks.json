@@ -1,0 +1,33 @@
+{
+  "source_mesh_manifold": true,
+  "upright_to_floor_angle_degrees": 89.99999987823367,
+  "upright_front_y_span_mm": 4.76837158203125e-07,
+  "upright_back_y_span_mm": 1.430511474609375e-06,
+  "ring_center_xyz_at_three_heights_mm": [
+    [
+      7.579122507391752e-15,
+      124.99999926860444,
+      132.0
+    ],
+    [
+      7.579122507391752e-15,
+      124.99999933236114,
+      162.0
+    ],
+    [
+      7.579122507391752e-15,
+      124.99999943862231,
+      212.0
+    ]
+  ],
+  "ring_xy_drift_mm": 1.7001787000481272e-07,
+  "radius_profile_deviations_mm": {
+    "arm_top": 0.00042213829711829076,
+    "arm_bottom": 0.00042213829711829076,
+    "crown_top": 0.007897121624412029,
+    "crown_bottom": 0.007896469623045854
+  },
+  "flare_contour_max_error_mm": 0.0062618255615234375,
+  "flare_plan_continuity": "C2 at straight taper and circular crown endpoints",
+  "scope": "Geometric guide-axis/ideal translation check only. Real slider fit, locking, deflection and manufacturing tolerances are not validated."
+}
