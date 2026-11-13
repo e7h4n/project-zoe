@@ -1,0 +1,21 @@
+{
+  "original_model_sha256": "71447bfe653ec9d5d571938256674df7286090d83e6b5cd25193f0796c3bda85",
+  "upper_evaluated_vertex_count_checked": 15378,
+  "upper_vertex_max_movement_mm": 5.560828867601231e-06,
+  "fixed_base_is_unioned_into_stand": true,
+  "mesh_checks": {
+    "BrewDuo_C_shell_5mm": {
+      "vertices": 39907,
+      "faces": 63338,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    },
+    "weighed_base": {
+      "vertices": 34908,
+      "faces": 69812,
+      "boundary_edges": 0,
+      "nonmanifold_edges": 0
+    }
+  },
+  "original_source_not_overwritten": true
+}

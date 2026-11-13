@@ -47,7 +47,8 @@ The website now loads an actual GLB, not a pre-rendered image. The `.blend` rema
 | --- | --- |
 | `model/project-zoe.blend` | Complete exterior assembly, original aluminum materials, camera and studio lights. Blender 5.0.1. |
 | `cad/base.step` | Approved hollow weighing cover with restored rear side wings and R0.35 upper edges; not the complete assembly. |
-| `cad/fixed-base-local.step` | Local fixed rear joint and integrated flat floor, used for clearance checks; not the full upright. |
+| `cad/fixed-base-local.step` | Local fixed rear joint and integrated contour-matched flat floor, used for clearance checks; not the full upright. |
+| `cad/fixed-rear-joint.step` | Retained original central joint, used by `scripts/build_floor.py` to rebuild the fixed base. |
 | `cad/base-before-recess.step` | Historical solid base before the circular recess, not the current cover. |
 | `scripts/build_base.py` | Parametric CadQuery construction of the recessed base. |
 | `scripts/export_glb.py` | Headless Blender → compressed GLB export. |
@@ -92,7 +93,7 @@ Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit.
 - Overall base assembly envelope: **100 × 170 × 5 mm**; cover R8 plan corners and **R0.35 upper perimeter edges**.
 - Independent hollow weighing cover: top Z5, underside Z3.8, skirt bottom Z0.8; nominal top/side thickness **1.2 mm** (local rounding and reliefs vary).
 - Restored rear side wings extend to Y0 and wrap around the upright, with the central notch X±25.8 ending at Y12. No full-width forward rear closure.
-- Fixed upright and flat bottom plate are united in the Blender source. The floor is 96 × 154 × 1.2 mm, spanning Y14–168; no separate raised perimeter frame.
+- Fixed upright and flat bottom plate are united in the Blender source. The floor follows the cover contour, including the rear side wings: **96 × 166 × 1.2 mm**, spanning Y2–168, with R6 plan corners. Its contour is inset 2 mm from the cover exterior, giving a nominal **0.8 mm side gap** to the 1.2 mm skirt. The floor notch is X±27.8 through Y14; the original central stand tongue is retained. No separate raised perimeter frame.
 - Circular flat seat: **Ø85 mm**, centered at **X0 / Y125**, coaxial with the dripper support.
 - Recess: **0.5 mm** deep; nominal remaining cover roof thickness beneath its flat region is **0.7 mm**. This is an appearance prototype, not a validated structural thickness.
 - S transition: two tangent, oppositely curved **R0.25** quarter circles, tangent to both planes. Radial blend width **0.5 mm**, outer transition diameter **Ø86 mm**.
@@ -106,10 +107,19 @@ Rebuild the base separately (CadQuery is not needed for website export):
 
 ```sh
 pip install cadquery==2.8.0
+python scripts/build_floor.py
 python scripts/build_base.py
 ```
 
-This updates the cover STEP/STL and `docs/checks.json` only; it does **not** silently modify the Blender assembly. It also checks clearance against `cad/fixed-base-local.step`. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry. Internal cavity, fastening and sensor fit remain unvalidated.
+`build_floor.py` rebuilds the local fixed floor/joint CAD and `docs/floor-checks.json` from the retained joint. `build_base.py` updates the cover STEP/STL and `docs/checks.json` only; it does **not** silently modify the Blender assembly. It also checks clearance against `cad/fixed-base-local.step`. Replace `weighed_base` in Blender with the resulting STL, preserve material/normals setup, and save before committing to update website geometry. Internal cavity, fastening and sensor fit remain unvalidated.
+
+### Contour-matched underside
+
+![Underside with continuous contour-following clearance](docs/bottom.png)
+
+![Rear underside and stand connection](docs/rear-bottom.png)
+
+These are approved design-review renders, not evidence of sensor fit or manufacturing readiness.
 
 ## Status and safety
 
