@@ -32,7 +32,7 @@ async function settle(page) {
       await new Promise(requestAnimationFrame);
       const current = window.projectZoe.getView();
       const change = Math.max(...current.position.map((n, k) => Math.abs(n - previous.position[k])), ...current.target.map((n, k) => Math.abs(n - previous.target[k])));
-      stable = change < 1e-6 ? stable + 1 : 0;
+      stable = change < 1e-6 && !current.transitioning ? stable + 1 : 0;
       if (stable >= 5) return;
       previous = current;
     }
@@ -49,12 +49,36 @@ async function open(context) {
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
   return page;
 }
+async function checkPresets(page, prefix) {
+  const ids = ['overall', 'surface', 'rear', 'edge', 'underside', 'rearUnderside'];
+  for (const id of ids) {
+    const button = page.locator(`button[data-view="${id}"]`);
+    await button.click();
+    await settle(page);
+    const current = await view(page);
+    assert.equal(current.preset, id);
+    assert.equal(await button.getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('[data-view][aria-pressed="true"]').count(), 1);
+    assert.equal(current.transitioning, false);
+    assert(current.distance > .3 && current.distance < 24);
+    if (id !== 'overall') assert(Math.abs(current.target[1]) > .1, 'Detail must target its geometry, not the model center');
+    await page.screenshot({ path: path.join(root, `test-results/${prefix}-${id}.png`), fullPage: true });
+  }
+  await page.getByRole('button', { name: 'Reset view' }).click();
+  await settle(page);
+  assert.equal((await view(page)).preset, 'overall');
+}
 await mkdir(path.join(root, 'test-results'), { recursive: true });
 try {
   const desktop = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   const page = await open(desktop);
   const initial = await view(page);
   assert.equal(initial.meshes, 3);
+  assert.equal(initial.finish.name, 'Silver anodized aluminum');
+  for (const material of initial.finish.materials) {
+    assert.equal(material.metallic, 1, 'Export must retain metallic aluminum');
+    assert(Math.abs(material.roughness - .32) < 1e-5, 'Aluminum must have the specified satin roughness');
+  }
   assert(initial.dimensionsMeters[0] > .099 && initial.dimensionsMeters[0] < .101, 'GLB width must be 100mm in meter units');
   assert(initial.dimensionsMeters[1] > .30 && initial.dimensionsMeters[1] < .34, 'GLB height must be approx. 320mm');
   assert(initial.dimensionsMeters[2] > .169 && initial.dimensionsMeters[2] < .171, 'GLB depth must be 170mm');
@@ -95,6 +119,15 @@ try {
   reset = await view(page);
   assert(delta(reset.position, initial.position) < 1e-5, 'Keyboard R must reset');
   assert.equal(await page.locator('canvas').evaluate(c => c.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true }))), false);
+  await checkPresets(page, 'desktop');
+  // Fast switching must stop the previous camera transition and preserve the latest selection.
+  await page.locator('[data-view="edge"]').click();
+  await page.locator('[data-view="underside"]').click();
+  await settle(page);
+  assert.equal((await view(page)).preset, 'underside');
+  await page.setViewportSize({ width: 1000, height: 760 });
+  await settle(page);
+  assert.equal((await view(page)).preset, 'underside', 'Resizing must preserve the selected detail');
   await desktop.close();
 
   const mobile = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
@@ -118,9 +151,17 @@ try {
   const pinched = await view(touchPage);
   assert(pinched.distance < beforePinch.distance, 'Two-finger pinch must zoom');
   assert(delta(pinched.target, beforePinch.target) > .01, 'Two-finger movement must pan');
+  await checkPresets(touchPage, 'mobile');
+  await touchPage.emulateMedia({ reducedMotion: 'reduce' });
+  await touchPage.locator('[data-view="rear"]').click();
+  assert.equal((await view(touchPage)).transitioning, false, 'Reduced motion must skip transitions');
+  await touchPage.setViewportSize({ width: 320, height: 740 });
+  await settle(touchPage);
+  assert.equal(await touchPage.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  await touchPage.screenshot({ path: path.join(root, 'test-results/mobile-narrow.png'), fullPage: true });
   await mobile.close();
   assert.deepEqual(errors, [], 'No browser errors expected');
-  console.log('PASS: GLB units and meshes, left rotate, right pan, wheel zoom, reset, keyboard, context menu, responsive layout and touch rotate/pan/zoom.');
+  console.log('PASS: silver PBR finish, GLB units, mouse/keyboard/touch controls, all six desktop/mobile detail views, rapid switching, responsive resize and reduced motion.');
 } finally {
   await browser.close();
   await new Promise(resolve => server.close(resolve));

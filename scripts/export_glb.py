@@ -1,4 +1,4 @@
-"""Export only the product assembly as a white-clay GLB; never modify the .blend."""
+"""Export the product assembly in silver anodized aluminum; never modify the .blend."""
 import argparse
 import hashlib
 import json
@@ -24,12 +24,12 @@ def build(output):
     bpy.context.preferences.filepaths.use_scripts_auto_execute = False
     bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False)
     bpy.ops.object.select_all(action='DESELECT')
-    white = bpy.data.materials.new('Project Zoe white clay')
-    white.use_nodes = True
-    shader = white.node_tree.nodes.get('Principled BSDF')
-    shader.inputs['Base Color'].default_value = (.82, .81, .79, 1)
-    shader.inputs['Metallic'].default_value = 0
-    shader.inputs['Roughness'].default_value = .48
+    silver = bpy.data.materials.new('Silver anodized aluminum')
+    silver.use_nodes = True
+    shader = silver.node_tree.nodes.get('Principled BSDF')
+    shader.inputs['Base Color'].default_value = (.62, .65, .69, 1)
+    shader.inputs['Metallic'].default_value = 1
+    shader.inputs['Roughness'].default_value = .32
     for name in PRODUCT_OBJECTS:
         obj = bpy.data.objects.get(name)
         assert obj and obj.type == 'MESH', f'Missing product mesh: {name}'
@@ -37,7 +37,7 @@ def build(output):
         obj.hide_viewport = False
         obj.select_set(True)
         obj.data.materials.clear()
-        obj.data.materials.append(white)
+        obj.data.materials.append(silver)
         if name == 'weighed_base':
             # The CAD-imported STL has flat triangle normals. Smooth only the
             # display normals; preserve >30-degree creases and all vertices.
@@ -66,6 +66,8 @@ def build(output):
         'model': 'model/project-zoe.blend', 'model_sha256': sha(source),
         'export_script_sha256': sha(Path(__file__)), 'blender': bpy.app.version_string,
         'commit': os.environ.get('GITHUB_SHA'),
+        'finish': {'name': 'Silver anodized aluminum', 'metallic': 1, 'roughness': .32,
+                   'note': 'PBR appearance approximation, not a measured manufacturing finish.'},
         'glb': {'path': f'assets/{name}', 'sha256': checksum, 'units': 'meters',
                 'up_axis': 'Y', 'compression': 'KHR_draco_mesh_compression',
                 'position_quantization_bits': 20, 'objects': list(PRODUCT_OBJECTS)},

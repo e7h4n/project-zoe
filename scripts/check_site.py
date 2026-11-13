@@ -62,6 +62,12 @@ if __name__ == '__main__':
     assert 'KHR_draco_mesh_compression' in gltf.get('extensionsRequired', [])
     assert not any(gltf.get(key) for key in ('cameras', 'animations', 'images', 'textures'))
     assert not any(buffer.get('uri') for buffer in gltf['buffers']), 'GLB must be self-contained'
+    assert manifest['finish']['name'] == 'Silver anodized aluminum'
+    for material in gltf['materials']:
+        pbr = material['pbrMetallicRoughness']
+        assert pbr.get('metallicFactor', 1) == 1
+        assert abs(pbr['roughnessFactor'] - .32) < 1e-5
+        assert all(abs(a-b) < 1e-5 for a, b in zip(pbr['baseColorFactor'], [.62, .65, .69, 1]))
     for mesh in gltf['meshes']:
         for primitive in mesh['primitives']:
             assert primitive['attributes'].get('POSITION') is not None

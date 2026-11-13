@@ -2,11 +2,11 @@
 
 **The ultimate elegant coffee brewing tool.**
 
-An open-source pour-over stand concept. A circular crown, a dripper support, and a slender base. Explore the real 3D assembly as a clean white model.
+An open-source pour-over stand concept. A circular crown, a dripper support, and a slender base. Explore the real 3D assembly in satin silver anodized aluminum, with one-click views of the important design details.
 
 [Interactive website](https://e7h4n.github.io/project-zoe/) · [Blender source](model/project-zoe.blend)
 
-![Project Zoe white model](docs/preview.png)
+![Project Zoe silver interactive website](docs/site-preview.png)
 
 ## 3D controls
 
@@ -20,6 +20,9 @@ An open-source pour-over stand concept. A circular crown, a dripper support, and
 | Arrow keys (viewer focused) | Pan |
 | `+` / `−` (viewer focused) | Zoom |
 | `R`, `Home`, or **Reset view** | Restore the initial view |
+| Detail buttons | Smoothly frame the selected detail; continue orbiting, panning and zooming freely |
+
+Six preset buttons cover **Overall**, **Weighing surface** (Ø85 seat), **Rear joint**, **Edge radius** (R0.35 upper edge), **Underside** (contour-matched plate) and **Rear underside** (rear wings/stand connection). Their targets are defined in original design millimeters, converted to the displayed model space, and reframed for desktop and mobile aspect ratios. Selected buttons expose `aria-pressed`; reduced-motion users get immediate camera changes. Reset always returns to the overall composition.
 
 The viewer uses Three.js and OrbitControls. Context menus are suppressed **only inside the 3D canvas**. It renders on demand, with damping while moving; it does not auto-rotate. Keyboard focus is visible, and the model can be downloaded if WebGL is unavailable.
 
@@ -28,11 +31,11 @@ The viewer uses Three.js and OrbitControls. Context menus are suppressed **only 
 Every relevant push to `main`:
 
 1. Opens the actual `model/project-zoe.blend` in headless **Blender 5.0.1**, with automatic script execution disabled.
-2. Exports only the three product meshes, applying modifiers and a white-clay material in memory. Cameras, studio lights, floor and accessory proxies are excluded.
+2. Exports only the three product meshes, applying modifiers and a silver anodized aluminum PBR material in memory (metallic 1, roughness 0.32). Cameras, studio lights, floor and accessory proxies are excluded.
 3. Converts millimeters to glTF's meter units, uses Y-up, and applies **Draco compression**. Base display normals are smoothed while preserving >30° creases; vertices and original CAD geometry are unchanged. High-precision 20-bit position quantization keeps the small recess transition visually intact.
 4. Bundles the viewer and self-hosted Draco decoder, producing content-hashed assets. No CDN, account, project secret or external texture is needed at runtime.
 5. Validates the GLB structure, product objects, local assets and source/output hashes.
-6. Runs real Chromium tests for dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout and touch rotate/pan/pinch.
+6. Runs real Chromium tests for the silver PBR material, dimensions, left-drag rotation, right-drag pan, wheel zoom, reset, keyboard, mobile layout, touch rotate/pan/pinch, all six desktop/mobile preset views, rapid switching, responsive reframing and reduced motion.
 7. Deploys to **GitHub Pages** at <https://e7h4n.github.io/project-zoe/>.
 
 `model-manifest.json` on the live site records the Blender-source hash, export/build scripts, dependency lockfile, commit and exported asset hashes. The full Blender source remains unchanged by export.
@@ -86,7 +89,7 @@ Software WebGL is enabled for headless CI. Tests write desktop, mobile and rotat
 
 ### Edit the model
 
-Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit. Preserve the three product object names: `BrewDuo_C_shell_5mm`, `Triangular_pyramid_arm_flat_face_UP`, and `weighed_base`. The next CI build exports the changed geometry and updates the interactive website. The source keeps its aluminum finish; white materials are applied during export only. Camera framing, lighting and controls are in `web/viewer.js`.
+Open `model/project-zoe.blend` in Blender 5.0.1 or newer, edit, save and commit. Preserve the three product object names: `BrewDuo_C_shell_5mm`, `Triangular_pyramid_arm_flat_face_UP`, and `weighed_base`. The next CI build exports the changed geometry and updates the interactive website. The source keeps its aluminum finish; the consistent silver PBR material is applied during export only. The browser uses studio environment reflections to show the satin finish; this is an appearance approximation, not a measured anodizing specification. Camera framing, named detail views, lighting and controls are in `web/viewer.js`.
 
 ## Base geometry
 
