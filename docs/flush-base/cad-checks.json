@@ -1,0 +1,118 @@
+{
+  "revision": "aligned rear Y12 edges and middle/G contours; all lower tangents Z.5",
+  "units": "mm",
+  "C_roof_z": [
+    3.5,
+    5
+  ],
+  "M_web_z": [
+    2,
+    3
+  ],
+  "G_z": [
+    0.5,
+    1.5
+  ],
+  "C_roof_nominal_thickness_mm": 1.5,
+  "M_web_thickness_mm": 1,
+  "G_thickness_mm": 1,
+  "stack_total_mm": 4.5,
+  "skirt_z": [
+    0.5,
+    3.5
+  ],
+  "skirt_extension_below_roof_mm": 3,
+  "skirt_wall_mm": 1.2,
+  "G_inset_from_inner_skirt_wall_mm": 0.5,
+  "G_outer_inset_from_C_mm": 1.7,
+  "skirt_G_bottom_alignment_z": 0.5,
+  "nominal_vertical_gaps_mm": {
+    "C_M": 0.5,
+    "M_G": 0.5
+  },
+  "rear_crossing_bridge_unobstructed": true,
+  "aligned_rear_cross_edges_y_mm": 12,
+  "aligned_M_G_outer_contour": true,
+  "bend_outer_radius_mm": 9.5,
+  "bend_inner_radius_mm": 5,
+  "aligned_bend_skirt_G_bottom_z_mm": 0.5,
+  "rear_side_skirt_end_y_mm": 11.5,
+  "rubber_feet_added": false,
+  "neck_probe_y_mm": [
+    10.01,
+    10.5,
+    11,
+    11.5,
+    12,
+    12.5,
+    13,
+    13.5,
+    14,
+    14.5,
+    15,
+    20,
+    30
+  ],
+  "scope": "Geometric concept only. No sensor/mount, deflection, tolerance, production or weighing verification. Bend, G and skirt undersides are aligned at Z.5; feet/contact force paths remain future work.",
+  "C": {
+    "valid": true,
+    "solids": 1,
+    "volume_mm3": 23374.973640294287
+  },
+  "M": {
+    "valid": true,
+    "solids": 1,
+    "volume_mm3": 18392.851320505153
+  },
+  "G": {
+    "valid": true,
+    "solids": 1,
+    "volume_mm3": 15492.989812420976
+  },
+  "C_M": {
+    "overlap_mm3": 0.0,
+    "min_distance_mm": 0.4999999999999883
+  },
+  "M_G": {
+    "overlap_mm3": 0.0,
+    "min_distance_mm": 0.5
+  },
+  "C_G": {
+    "overlap_mm3": 0.0,
+    "min_distance_mm": 0.4999999999999887
+  },
+  "neck_thickness_samples_mm": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "explicit_alignment_checks_passed": true,
+  "G_plan_nominal_bounds_mm": {
+    "x": [
+      -48.3,
+      48.3
+    ],
+    "y": [
+      1.7,
+      168.3
+    ],
+    "corner_radius": 6.3,
+    "rear_notch_x": [
+      -27.5,
+      27.5
+    ],
+    "rear_notch_end_y": 12
+  },
+  "full_M_valid": true,
+  "full_M_solids": 1
+}

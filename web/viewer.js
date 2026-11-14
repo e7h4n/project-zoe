@@ -20,9 +20,9 @@ const presets = {
   upperBend: { eye: [-110, 120, 165], target: [0, 35, 113], span: 100, text: 'The fixed upper support replaces the historical automated crown and adjustable arm.' },
   surface: { eye: [-155, 315, 220], target: [0, 96, 13], span: 205, text: 'Original continuous weighing surface and Ø85 mm seat, recessed 0.5 mm.' },
   rear: { eye: [-125, 235, 145], target: [0, 12, 12], span: 90, text: 'Original rear base joint retained, with clearance around the upright root.' },
-  edge: { eye: [-135, 270, 65], target: [-30, 150, 1], span: 65, text: 'Outer skirt extended downward to conceal the new inset ground plate. Nominal table gap 0.5 mm, not load-validated.' },
+  edge: { eye: [-135, 270, 65], target: [-30, 150, 1], span: 65, text: '1.5 / 0.5 / 1 / 0.5 / 1 mm stack. Straight skirt extends 3 mm below the roof and is flush with the ground-plate underside. No feet yet.' },
   underside: { eye: [-155, 315, -220], target: [0, 85, 0], span: 205, text: 'Three-layer serial concept: cover C, integrated floor/upright M, inset ground plate G. Sensors are not installed.' },
-  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Shortened ground plate: 94.4 × 156.4 × 2 mm, R5.2. Rear straight-edge gap to the middle layer is nominally 0.8 mm; front and side gaps also 0.8 mm.' },
+  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Middle/ground outer contours align; their rear cross-edges align with the roof at Y12. Bend, ground and skirt undersides align at Z0.5. Skirt clearance remains 0.5 mm.' },
 };
 let renderer;
 let controls;

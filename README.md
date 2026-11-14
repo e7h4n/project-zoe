@@ -4,14 +4,17 @@
 
 [Interactive website](https://e7h4n.github.io/project-zoe/) · [Blender source](model/project-zoe.blend)
 
-![Manual stand with concealed bottom plate](docs/three-layer/after-skirt-overall.png)
+![Manual stand with flush sandwich base](docs/flush-base/overall.png)
 
 ## Current revision
 
 - Fixed, level manual dripper ring replaces the historical automated crown and adjustable arm.
-- Original continuous weighing surface, recessed carafe seat and rear base joint retained.
+- Original weighing top/seat and reviewed upper stand retained; lower bend and rear joint revised for the aligned base.
 - Three-layer serial weighing concept: table → new ground plate G → total-load sensor → integrated floor/upright M → carafe sensor → cover C.
-- Only the cover's exterior skirts extend downward, concealing G without a new seam across the weighing surface. Rear-notch inner walls retain their clearance.
+- Reviewed stack: C roof 1.5 mm + 0.5 mm gap + M web 1 mm + 0.5 mm gap + G 1 mm = 4.5 mm.
+- C has straight 3 mm skirts below its roof, flush with G's underside. There is no inward folded return. G is 0.5 mm inside the skirt's **inner** walls, not its outside silhouette.
+- The whole Y10–32 bridge is continuously 1 mm thick. M/G outer contours align; their rear Y12 cross-edges align with the weighing roof.
+- The lower bend tangent is raised to Z0.5 with an outer R9.5 arc (inner R5 retained), aligning with the ground plate and skirt underside. No rubber feet added yet.
 - **Sensors and their mounts are not yet installed or selected.** One sensor per interface is preferred, subject to eccentric-load, moment and capacity verification. The model is not a working scale.
 
 After common tare, the total channel would measure system mass increment, the carafe channel beverage increment, and their difference approximately dripper-retained water. Evaporation, leaks, dynamic forces, channel timing and drift affect this estimate.
@@ -22,36 +25,41 @@ After common tare, the total channel would measure system mass increment, the ca
 | --- | --- |
 | Cover plan envelope | 100 × 170 mm, R8 plan corners |
 | Cover top / carafe seat | Z5 / Z4.5 mm; Ø85 mm seat at X0/Y125 |
-| Cover roof underside / floor top | Z3.8 / Z2 mm; only 1.8 mm original upper cavity |
-| Outer skirt bottom | Z−3.5 mm, extended 4.3 mm from Z0.8 |
-| New inset ground plate G | 94.4 × 156.4 × 2 mm, R5.2; X±47.2, Y10.8–167.2; Z−4 to −2 |
-| Nominal XY contour gaps | C inner wall → M: 0.8 mm; M → G at front/sides: 0.8 mm |
-| Rear straight-edge gap | G rear Y10.8 → M central rear cross-edge Y10: 0.8 mm |
-| Overall base height | 9 mm, Z−4 to Z5; no longer the historical 5 mm envelope |
-| Nominal skirt/table gap | 0.5 mm, **not validated under load or tolerance stack-up** |
+| Cover roof underside / top | Z3.5 / Z5 mm; thickness 1.5 mm (1 mm at the recessed seat) |
+| Middle horizontal web and rear bridge | Z2–3 mm, continuously 1 mm thick after Y10 |
+| New ground plate G | 96.6 × 166.6 × 1 mm, R6.3; X±48.3, Y1.7–168.3; Z0.5–1.5 |
+| Nominal vertical gaps | C → M: 0.5 mm; M → G: 0.5 mm |
+| Straight skirt | Z0.5–3.5, extends 3 mm below roof; 1.2 mm wall |
+| G plan clearance | 0.5 mm from inner skirt walls; exterior inset from C is 1.7 mm |
+| Rear openings | C roof and M/G cross-edges all end at Y12; G/M notch X±27.5; C notch X±25.8 |
+| Rear side-skirt ends | Y11.5, leaving 0.5 mm before the Y12 plate edge |
+| M/G exterior contour | Shared 96.6 × 166.6 mm, R6.3 |
+| Stack height | 4.5 mm, Z0.5–5; bend, G and skirt undersides all align at Z0.5 |
+| Sensor space / table clearance | **Not validated. Thickness allocation is an appearance assumption.** |
 | Fixed ring | OD60 / ID48 mm, center X0/Y125, Z113.5–118.5 |
 | Seat-to-ring underside | 109 mm; nominal 99 mm server leaves 10 mm to ring, not necessarily dripper outlet |
 
-Extending the skirt does **not** enlarge the original C/M cavity. Ground-plate size and gaps are provisional. No claim of sensor fit, loaded clearance or manufacturing readiness is made. The carafe seat dimension is a design input, not an independently verified HARIO specification.
+The skirt arrangement follows the reviewed dimensions, not a sensor packaging solution. The skirt conceals G from the exterior sides and ends flush with G's bottom. The rear central opening must remain clear where M passes through; a downward crosswall there would cause interference/force bypass. The bend, G and skirt all end at Z0.5; the stand and moving cover must not touch the table during weighing, so future feet and load-dependent clearances are still required before this can function as a scale. No claim of stiffness, sensor fit, loaded clearance or manufacturing readiness is made. The carafe seat dimension remains a design input, not an independently verified HARIO specification.
 
-### Equal-gap bottom revision
+### Aligned-edge three-millimeter skirt revision (2026-11-14)
 
-G is a complete rounded rectangle, shortened at the rear without following M's notch. The rear straight edge references the actual central cross-edge at Y10, **not** the side notch tips at Y14; the former Y14.8 placement left 4.8 mm and is superseded. Front corners share centers X±42/Y162: C inner R6.8, M outer R6, G outer R5.2, preserving nominal 0.8 mm gaps through the arcs. C's 1.2 mm skirt wall is material thickness, not another gap. Rear corner transitions are not a full-perimeter equal offset of the notched M. M's R0.35 edge rounding can slightly change projected outlines. Vertical gaps and source C/M geometry are unchanged.
+`docs/flush-base/` contains current CAD and mesh QA, colored CAD details/sections, silver renders and an explanatory exploded view. The .blend is saved assembled, not exploded. Three CAD parts are valid single solids without nominal intersections; all three pairwise minimum distances are 0.5 mm. Thirteen rear-neck thickness probes are exactly 1 mm; mesh ray checks also cover the formerly missed neck. The reviewed Blender upper geometry above Z10 is preserved exactly. The CAD full-stand export retains its prior nominal, unsoftened upper geometry; local Blender edge softening remains a display refinement.
 
-![Current equal-gap bottom view and corner detail](docs/equal-gap-bottom/equal-gap-review.png)
-
-The renders and checks under `docs/three-layer/` record the previous skirt-extension stage; their longer R8 ground plate is historical. Current ground-plate dimensions and preservation checks are under `docs/equal-gap-bottom/`.
+`docs/equal-gap-bottom/` and `docs/three-layer/` are historical and do not describe the current flush model.
 
 ## Source files
 
 | Path | Contents |
 | --- | --- |
 | `model/project-zoe.blend` | Current three-layer manual assembly, studio camera and lighting; Blender 5.0.1 |
-| `cad/base.step` | Current cover with extended exterior skirts; unchanged upper surface |
+| `cad/base.step` | 1.5 mm weighing roof and straight 3 mm skirts; unchanged seat/top |
 | `cad/ground-plate-concept.step` | Provisional new inset ground plate G |
 | `cad/manual-fixed-upper.step` | Nominal manual upper support solid; Blender mesh has local edge softening |
-| `cad/fixed-base-local.step` | Retained original integrated floor/rear-joint CAD, not full upright |
-| `docs/equal-gap-bottom/` | Current shortened G contour checks, unchanged C/M fingerprints and bottom views |
+| `cad/fixed-base-local.step` | Current thinned web and retained large rear bend, not full upright |
+| `cad/Project_Zoe_flush_assembly.step` | Complete nominal three-part flush assembly |
+| `scripts/build_flush_base.py`, `scripts/apply_flush_base.py` | Pinned-CAD rebuild and Blender lower-region update |
+| `docs/flush-base/` | Current dimension/check receipts and review renders |
+| `docs/equal-gap-bottom/` | Historical shortened G contour checks and bottom views |
 | `docs/three-layer/` | Historical skirt-extension stage checks and renders (before G was shortened) |
 | `scripts/check_model.py` | Current mesh topology, floor, seat, ring and ground-plate geometry checks |
 | `scripts/export_glb.py` | Current three-object Blender → compressed GLB export |
@@ -59,7 +67,7 @@ The renders and checks under `docs/three-layer/` record the previous skirt-exten
 
 Other CAD, renders and reconstruction scripts are **historical studies**, not the current complete assembly. In particular, `build_base.py`, `build_upper.py`, `rebuild_rounded_shell.py`, `apply_upper.py` and `check_historical_automatic_model.py` describe the older automated-crown design and must not be used to regenerate the current assembly. The complete prior version is retained in [Git history at a0b18dd](https://github.com/e7h4n/project-zoe/tree/a0b18dd297a377172f05ef80fcb6f4c9e32a9d0a). There is no complete parametric CAD regeneration pipeline for the new assembly yet.
 
-Earlier CAD comparisons confirm no changed upper cover volume above Z1.1 during skirt extension. Current CAD checks confirm the revised G is a valid single solid with no nominal intersection with C or M. Mesh checks confirm manifold geometry and unchanged C/M meshes and transforms during the G revision. These checks do not evaluate deflection, contact under load, tolerances or real weighing behavior.
+Current checks confirm three valid manifold product meshes, a continuous 1 mm neck/web, a 4.5 mm stack with skirt/G undersides aligned at Z0.5, preserved seat and unchanged Blender upper geometry above Z10. CAD checks confirm three valid single solids with no nominal intersections. These checks do not evaluate deflection, contact under load, tolerances or real weighing behavior.
 
 ## Interactive controls
 

@@ -1,0 +1,18 @@
+{
+  "BrewDuo_C_shell_5mm": {
+    "vertices": 15921,
+    "faces": 18314,
+    "nonmanifold_edges": 0
+  },
+  "weighed_base": {
+    "vertices": 49302,
+    "faces": 98600,
+    "nonmanifold_edges": 0
+  },
+  "New_recessed_ground_plate_CONCEPT": {
+    "vertices": 520,
+    "faces": 1036,
+    "nonmanifold_edges": 0
+  },
+  "upper_vertex_max_movement_mm": 0.0
+}

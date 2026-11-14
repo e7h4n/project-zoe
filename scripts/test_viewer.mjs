@@ -84,7 +84,7 @@ try {
     assert(Math.abs(material.roughness - .32) < 1e-5, 'Aluminum must have the specified satin roughness');
   }
   assert(initial.dimensionsMeters[0] > .099 && initial.dimensionsMeters[0] < .101, 'GLB width must be 100mm in meter units');
-  assert(initial.dimensionsMeters[1] > .122 && initial.dimensionsMeters[1] < .123, 'GLB height must be approx. 122.5mm');
+  assert(initial.dimensionsMeters[1] > .1179 && initial.dimensionsMeters[1] < .1181, 'GLB height must be approx. 118mm after all undersides align at Z0.5');
   assert(initial.dimensionsMeters[2] > .169 && initial.dimensionsMeters[2] < .171, 'GLB depth must be 170mm');
   await page.screenshot({ path: path.join(root, 'test-results/desktop.png') });
   const rect = await page.locator('canvas').boundingBox();
