@@ -22,7 +22,7 @@ const presets = {
   rear: { eye: [-125, 235, 145], target: [0, 12, 12], span: 90, text: 'Original rear base joint retained, with clearance around the upright root.' },
   edge: { eye: [-135, 270, 65], target: [-30, 150, 1], span: 65, text: 'Outer skirt extended downward to conceal the new inset ground plate. Nominal table gap 0.5 mm, not load-validated.' },
   underside: { eye: [-155, 315, -220], target: [0, 85, 0], span: 205, text: 'Three-layer serial concept: cover C, integrated floor/upright M, inset ground plate G. Sensors are not installed.' },
-  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Rear notch clearance retained. Ground plate 94 × 164 × 2 mm is a provisional envelope.' },
+  rearUnderside: { eye: [-125, 180, -130], target: [0, 17, 0], span: 100, text: 'Shortened ground plate: 94.4 × 156.4 × 2 mm, R5.2. Rear straight-edge gap to the middle layer is nominally 0.8 mm; front and side gaps also 0.8 mm.' },
 };
 let renderer;
 let controls;

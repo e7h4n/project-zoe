@@ -24,7 +24,9 @@ After common tare, the total channel would measure system mass increment, the ca
 | Cover top / carafe seat | Z5 / Z4.5 mm; Ø85 mm seat at X0/Y125 |
 | Cover roof underside / floor top | Z3.8 / Z2 mm; only 1.8 mm original upper cavity |
 | Outer skirt bottom | Z−3.5 mm, extended 4.3 mm from Z0.8 |
-| New inset ground plate G | 94 × 164 × 2 mm, R8; center X0/Y85; Z−4 to −2 |
+| New inset ground plate G | 94.4 × 156.4 × 2 mm, R5.2; X±47.2, Y10.8–167.2; Z−4 to −2 |
+| Nominal XY contour gaps | C inner wall → M: 0.8 mm; M → G at front/sides: 0.8 mm |
+| Rear straight-edge gap | G rear Y10.8 → M central rear cross-edge Y10: 0.8 mm |
 | Overall base height | 9 mm, Z−4 to Z5; no longer the historical 5 mm envelope |
 | Nominal skirt/table gap | 0.5 mm, **not validated under load or tolerance stack-up** |
 | Fixed ring | OD60 / ID48 mm, center X0/Y125, Z113.5–118.5 |
@@ -32,7 +34,13 @@ After common tare, the total channel would measure system mass increment, the ca
 
 Extending the skirt does **not** enlarge the original C/M cavity. Ground-plate size and gaps are provisional. No claim of sensor fit, loaded clearance or manufacturing readiness is made. The carafe seat dimension is a design input, not an independently verified HARIO specification.
 
-![Concealed bottom close view](docs/three-layer/after-skirt-close.png)
+### Equal-gap bottom revision
+
+G is a complete rounded rectangle, shortened at the rear without following M's notch. The rear straight edge references the actual central cross-edge at Y10, **not** the side notch tips at Y14; the former Y14.8 placement left 4.8 mm and is superseded. Front corners share centers X±42/Y162: C inner R6.8, M outer R6, G outer R5.2, preserving nominal 0.8 mm gaps through the arcs. C's 1.2 mm skirt wall is material thickness, not another gap. Rear corner transitions are not a full-perimeter equal offset of the notched M. M's R0.35 edge rounding can slightly change projected outlines. Vertical gaps and source C/M geometry are unchanged.
+
+![Current equal-gap bottom view and corner detail](docs/equal-gap-bottom/equal-gap-review.png)
+
+The renders and checks under `docs/three-layer/` record the previous skirt-extension stage; their longer R8 ground plate is historical. Current ground-plate dimensions and preservation checks are under `docs/equal-gap-bottom/`.
 
 ## Source files
 
@@ -43,14 +51,15 @@ Extending the skirt does **not** enlarge the original C/M cavity. Ground-plate s
 | `cad/ground-plate-concept.step` | Provisional new inset ground plate G |
 | `cad/manual-fixed-upper.step` | Nominal manual upper support solid; Blender mesh has local edge softening |
 | `cad/fixed-base-local.step` | Retained original integrated floor/rear-joint CAD, not full upright |
-| `docs/three-layer/` | Nominal CAD checks, preservation fingerprints and current renders |
+| `docs/equal-gap-bottom/` | Current shortened G contour checks, unchanged C/M fingerprints and bottom views |
+| `docs/three-layer/` | Historical skirt-extension stage checks and renders (before G was shortened) |
 | `scripts/check_model.py` | Current mesh topology, floor, seat, ring and ground-plate geometry checks |
 | `scripts/export_glb.py` | Current three-object Blender → compressed GLB export |
 | `web/` | Interactive Three.js viewer with twelve desktop/mobile camera presets |
 
 Other CAD, renders and reconstruction scripts are **historical studies**, not the current complete assembly. In particular, `build_base.py`, `build_upper.py`, `rebuild_rounded_shell.py`, `apply_upper.py` and `check_historical_automatic_model.py` describe the older automated-crown design and must not be used to regenerate the current assembly. The complete prior version is retained in [Git history at a0b18dd](https://github.com/e7h4n/project-zoe/tree/a0b18dd297a377172f05ef80fcb6f4c9e32a9d0a). There is no complete parametric CAD regeneration pipeline for the new assembly yet.
 
-CAD comparisons confirm no changed upper cover volume above Z1.1 and no nominal intersection with the original fixed base or G. Mesh checks confirm manifold geometry and unchanged middle/ground mesh fingerprints during skirt extension. These checks do not evaluate deflection, contact under load, tolerances or real weighing behavior.
+Earlier CAD comparisons confirm no changed upper cover volume above Z1.1 during skirt extension. Current CAD checks confirm the revised G is a valid single solid with no nominal intersection with C or M. Mesh checks confirm manifold geometry and unchanged C/M meshes and transforms during the G revision. These checks do not evaluate deflection, contact under load, tolerances or real weighing behavior.
 
 ## Interactive controls
 

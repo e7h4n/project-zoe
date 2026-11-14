@@ -1,0 +1,53 @@
+{
+  "reference": "GitHub e0453aa, C and M unchanged",
+  "ground_plate_dimensions_mm": [
+    94.4,
+    156.4,
+    2
+  ],
+  "ground_plate_bounds_mm": {
+    "x": [
+      -47.2,
+      47.2
+    ],
+    "y": [
+      10.8,
+      167.2
+    ],
+    "z": [
+      -4,
+      -2
+    ]
+  },
+  "ground_plate_plan_corner_radius_mm": 5.2,
+  "nominal_plan_gaps_mm": {
+    "C_inner_wall_to_M_front_and_sides": 0.8,
+    "M_outer_edge_to_G_front_and_sides": 0.8
+  },
+  "front_corner_common_centers_xy_mm": [
+    [
+      -42,
+      162
+    ],
+    [
+      42,
+      162
+    ]
+  ],
+  "reference_plan_radii_mm": {
+    "C_outer": 8,
+    "C_inner": 6.8,
+    "M_outer": 6,
+    "G_outer": 5.2
+  },
+  "rear_central_joint_edge_y_mm": 10,
+  "rear_clearance_from_keepout_line_mm": 0.8,
+  "nominal_vertical_gaps_unchanged_mm": {
+    "C_M": 1.8,
+    "M_G": 2
+  },
+  "C_G_intersection_mm3": 0.0,
+  "M_G_intersection_mm3": 0.0,
+  "valid_single_ground_solid": true,
+  "notes": "0.8 mm gaps are nominal XY contour distances, not vertical gaps or tolerance/deflection guarantees. Middle edge R0.35 rounding can change projected silhouette slightly. Rear G straight edge is 0.8mm forward of actual central joint edge Y10; rear corner transitions are not a full-perimeter offset of the notched M. Sensors not installed."
+}

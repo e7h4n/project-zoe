@@ -25,8 +25,16 @@ for name in names:
     if name == names[2]:
         assert abs(min(v.z for v in vertices) + 4) < .002
         assert abs(max(v.z for v in vertices) + 2) < .002
-        for axis, span in [(0,94), (1,164)]:
+        for axis, span in [(0,94.4), (1,156.4)]:
             assert abs(max(v[axis] for v in vertices)-min(v[axis] for v in vertices)-span)<.002
+        assert abs(min(v.y for v in vertices)-10.8)<.002, 'Ground rear edge must be Y10.8'
+        assert abs(max(v.y for v in vertices)-167.2)<.002, 'Ground front edge must be Y167.2'
+        assert abs(max(v.x for v in vertices)-47.2)<.002, 'Ground side must be X47.2'
+        # Front plan corner shares center (42,162) with C and M.
+        import math
+        corner = [v for v in vertices if v.x>42.01 and v.y>162.01]
+        assert len(corner)>10
+        assert max(abs(math.hypot(v.x-42,v.y-162)-5.2) for v in corner)<.012, 'G plan radius must be R5.2'
     evaluated.to_mesh_clear()
 fixed, cover = trees[names[0]], trees[names[1]]
 def z_hit(tree, point, direction, expected, distance=10):
